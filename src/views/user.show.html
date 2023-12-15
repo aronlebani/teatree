@@ -1,0 +1,17 @@
+<section id="user" class="container">
+	<header>
+		<h2>Your details</h2>
+	</header>
+	<ul>
+		<li>
+			Name<span>{{ user.name }}</span>
+		</li>
+		<li>
+			Email<span>{{ user.email }}</span>
+		</li>
+	</ul>
+	<footer>
+		<div></div>
+		<a href="/user/{{ user.id }}/edit">Edit</a>
+	</footer>
+</section>

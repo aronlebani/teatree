@@ -1,0 +1,17 @@
+<section id="integrations" class="container">
+	<header>
+		<h2>Integrations</h2>
+	</header>
+	<ul>
+		<li>
+			Mailchimp
+			{% if integration.mailchimp-subscribe-url %}
+				<span>Enabled</span>
+			{% else %}
+				<a href="/profile/{{ profile.id }}/integration/{{ integration.id }}/mailchimp/edit">
+					Enable
+				</a>
+			{% endif %}
+		</li>
+	</ul>
+</section>

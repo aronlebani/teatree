@@ -1,0 +1,4 @@
+public/userdata
+db/*.db
+.env
+.config

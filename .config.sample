@@ -1,0 +1,9 @@
+(:hostname "localhost"
+ :smtp-host "localhost"
+ :smtp-port 1234
+ :smtp-password "secret"
+ :smtp-username "user@example.com"
+ :mailer "hello@localhost"
+ :db-url "db/local.db"
+ :port 4000
+ :debug t)

@@ -1,0 +1,18 @@
+<li>
+  <a class="link" href="{{ link.href }}" target="_blank">{{ link.title }}</a>
+  <div class="link-controls">
+		<a
+			class="link-edit"
+			href="profile/{{ profile.id }}/link/{{ link.id }}/edit"
+		>
+		  Edit
+		</a>
+		<form
+			name="link-delete"
+			action="/profile/{{ profile.id }}/link/{{ link.id }}/delete"
+			method="post"
+		>
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+</li>

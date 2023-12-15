@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  {% include "user.show.html" :user user %}
+  {% include "profile.show.html" :profile profile %}
+  {% include "link.index.html" :link link :profile profile %}
+  {% include "integration/index.show.html" :integration integration :profile profile %}
+{% endblock content %}

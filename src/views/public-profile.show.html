@@ -1,0 +1,97 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="/public/public-profile.css">
+		<title>{{ profile.username }}</title>
+		<meta property="og:title" content="" />
+		<meta property="og:url" content="" />
+		<meta property="og:type" content="website" />
+		<meta property="og:description" content="" />
+		<style>
+			body {
+				color: {{ profile.colour }};
+				background-color: {{ profile.bg-colour }};
+			}
+
+			a, a:visited {
+				color: {{ profile.colour }};
+			}
+
+			a:hover {
+				color: {{ profile.bg_colour }};
+			}
+
+			.link {
+				border: 2px solid {{ profile.colour }};
+			}
+
+			.link:hover {
+				background-color: {{ profile.colour }};
+				color: {{ profile.bg-colour }};
+			}
+
+			input {
+				border: 2px solid {{ profile.colour }};
+				border-radius: 0.25rem;
+				height: 2rem;
+				box-sizing: border-box;
+			}
+
+			button {
+				background-color: {{ profile.colour }};
+				color: {{ profile.bg-colour }};
+				border: 2px solid {{ profile.colour }};
+				border-radius: 0.25rem;
+				height: 2rem;
+			}
+
+			/* user-defined css */
+
+			{{ profile.css }}
+		</style>
+	</head>
+	<body>
+		<div class="inner">
+			{% if profile.image-url %}
+				<img
+					id="profile-image"
+					src="{{ profile.image-url}}"
+					alt="{{ profile.image-alt }}"
+				/>
+			{% else %}
+				<img
+					id="profile-image"
+					src="/public/assets/profile-default.jpg"
+					alt="A placeholder for the profile image."
+				/>
+			{% endif %}
+			<h1>{{ profile.username }}</h1>
+			<ul>
+				{% for link in links %}
+					<li>
+						<a class="link" href="{{ link.href }}" target="_blank">{{ link.title }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+			{% if integration.mailchimp-subscribe-url %}
+				<form
+					action="{{ integration.mailchimp-subscribe-url }}"
+					method="post"
+					target="_blank"
+				>
+					<input
+						type="email"
+						name="EMAIL"
+						value=""
+						placeholder="Subscribe to my mailing list!"
+						required
+					/>
+					<button type="submit">Submit</button>
+				</form>
+			{% endif %}
+		</div>
+	</body>
+</html>

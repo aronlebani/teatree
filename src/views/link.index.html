@@ -1,0 +1,14 @@
+<section id="links" class="container">
+	<header>
+		<h2>Links</h2>
+	</header>
+	<ul>
+		{% for link in links %}
+			{% include "link.show.html" :link link :profile profile %}
+		{% endfor %}
+	</ul>
+	<footer>
+		<div></div>
+		<a href="profile/{{ profile.id }}/link/new">New link</a>
+	</footer>
+</section>
