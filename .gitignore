@@ -2,3 +2,4 @@ public/userdata
 db/*.db
 .env
 .config
+teatree

@@ -3,10 +3,12 @@
   ;; Built-in libs
   (:import-from :asdf
                 :system-source-directory)
+  (:import-from :bt
+                :join-thread
+                :all-threads
+                :thread-name)
   (:import-from :uiop
                 :copy-file
-                :directory-files
-                :collect-sub*directories
                 :split-string)
   ;; Third-party libs
   (:import-from :cl-ppcre
@@ -16,9 +18,13 @@
                 :send-email)
   (:import-from :djula
                 :add-template-directory
+                :list-asdf-system-templates
+                :memory-template-store
                 :compile-template*
                 :render-template*
-                :*default-template-arguments*)
+                :*default-template-arguments*
+                :*recompile-templates-on-change*
+                :*current-store*)
   (:import-from :drakma
                 :http-request)
   (:import-from :easy-routes

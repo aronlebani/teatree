@@ -1,7 +1,7 @@
+include .env
+
 LISP ?= sbcl
-HOST =
-PATH =
-EXE = app
+EXE = teatree
 
 .PHONY: debug build clean deploy
 
@@ -21,5 +21,5 @@ clean:
 
 deploy:
 	chmod -R +x $(EXE)
-	rsync -rvsp --delete --progress public $(EXE) $(HOST):$(PATH)
-	ssh $(HOST) 'systemctl restart $(EXE).service'
+	rsync -rvsp --delete --progress public $(EXE) ${SERVER}:${DEST}
+	ssh ${SERVER} 'systemctl restart $(EXE).service'

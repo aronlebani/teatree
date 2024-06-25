@@ -90,7 +90,6 @@
 (defroute change-password/update
           ("/change-password" :method :post)
           (&post old-password new-password)
-  ; todo - stack overflow when changing password
   (with-validation (combine (valid-password? new-password))
     (with-resources ((u (find-auth-user :id (session-u-id))))
       (if (should-log-in? u old-password)
