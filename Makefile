@@ -21,5 +21,5 @@ clean:
 
 deploy:
 	chmod -R +x $(EXE)
-	rsync -rvsp --delete --progress public $(EXE) ${SERVER}:${DEST}
+	rsync -rvsp --delete --progress public scripts $(EXE) ${SERVER}:${DEST}
 	ssh ${SERVER} 'systemctl restart $(EXE).service'
