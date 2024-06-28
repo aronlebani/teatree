@@ -31,7 +31,7 @@ Or, if you aren't using a REPL, you can just run it via the makefile.
 
     make debug
 
-Now point your browser to <http://localhost:4000/admin>, and you should see a login page.
+Now point your browser to <http://localhost:5000/admin>, and you should see a login page.
 
 ## Testing
 

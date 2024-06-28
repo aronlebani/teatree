@@ -1,5 +1,6 @@
 public/userdata
 db/*.db
+db/*.db-shm
+db/*.db-wal
 .env
 .config
-teatree

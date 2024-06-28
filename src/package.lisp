@@ -9,6 +9,8 @@
                 :thread-name)
   (:import-from :uiop
                 :copy-file
+                :directory-files
+                :collect-sub*directories
                 :split-string)
   ;; Third-party libs
   (:import-from :cl-ppcre
@@ -63,4 +65,4 @@
                 :execute-to-list)
   (:import-from :uuid
                 :make-v4-uuid)
-  (:export :main))
+  (:export :main :dbg))

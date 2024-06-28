@@ -213,20 +213,24 @@
 
 ;;; --- Templates ---
 
-(defun push-template (template)
-  (let ((key (file-namestring template)))
-    (setf (gethash key *templates*) (compile-template* template))))
+(defun push-template (template-path base-dir)
+  (let ((key (enough-namestring template-path base-dir)))
+    (setf (gethash key *templates*) (compile-template* key))))
 
 (defun register-templates (base-dir)
   "Searches recursively for all html files in base-dir and registers them as
    templates."
-  (setf (getf *default-template-arguments* :year) (current-year)
-        (getf *default-template-arguments* :hostname) (getf *config* :hostname)
-        *current-store* (make-instance 'memory-template-store
-                                       :search-path (list base-dir))
-        *recompile-templates-on-change* nil)
-  (mapcar #'push-template
-          (list-asdf-system-templates :teatree "src/views")))
+  (setf (getf *default-template-arguments* :year) (current-year))
+  (setf (getf *default-template-arguments* :hostname) (getf *config* :hostname))
+  (add-template-directory base-dir)
+  (collect-sub*directories base-dir
+                           (constantly t)
+                           (constantly t)
+                           (lambda (dir)
+                             (mapc (lambda (x)
+                                     (push-template x base-dir))
+                                   (remove-if-not #'html-file?
+                                                  (directory-files dir))))))
 
 (defmacro render (name &rest objects)
   "Render the template name with the given objects."

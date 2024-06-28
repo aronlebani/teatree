@@ -15,7 +15,7 @@
 (defvar *templates*
   (make-hash-table :test #'equal))
 
-(register-templates "src/views/")
+(register-templates (relative-path "src/views/"))
 
 (defun dbg ()
   (setf *show-lisp-errors-p* t) 

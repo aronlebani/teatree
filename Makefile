@@ -1,25 +1,23 @@
 include .env
 
 LISP ?= sbcl
-EXE = teatree
 
-.PHONY: debug build clean deploy
+.PHONY: debug start build clean deploy
 
 debug:
 	$(LISP) --load teatree.asd \
 		--eval '(ql:quickload :teatree)' \
-		--eval '(teatree:main)'
+		--eval '(teatree:dbg)'
 
-build:
+start:
 	$(LISP) --load teatree.asd \
 		--eval '(ql:quickload :teatree)' \
-		--eval '(asdf:make :teatree)' \
-		--eval '(quit)'
+		--eval '(teatree:main)'
 
 clean:
-	rm $(EXE)
+	rm *.fasl
 
 deploy:
-	chmod -R +x $(EXE)
-	rsync -rvsp --delete --progress public scripts $(EXE) ${SERVER}:${DEST}
-	ssh ${SERVER} 'systemctl restart $(EXE).service'
+	rsync -rvsp --delete --progress \
+		README.md LICENSE teatree.asd Makefile scripts src public ${SERVER}:${DEST}
+	ssh ${SERVER} 'systemctl restart teatree.service'
