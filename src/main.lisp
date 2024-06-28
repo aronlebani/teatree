@@ -17,8 +17,11 @@
 
 (register-templates "src/views/")
 
-(if (getf *config* :debug)
-    (setf *show-lisp-errors-p* t))
+(defun dbg ()
+  (setf *show-lisp-errors-p* t) 
+  (start *app*)
+  (format t "DEBUG: Hunchentoot server is started~&")
+  (format t "DEBUG: Listening on localhost:~a~&" (getf *config* :port)))
 
 (defun main ()
   (start *app*)
