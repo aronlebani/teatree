@@ -1,3 +1,8 @@
+:root {
+	--colour: #244855;
+	--bg-colour: floralwhite;
+}
+
 body {
 	font-family: 'Helvetica', 'Arial', sans-serif;
 }
@@ -14,21 +19,7 @@ li {
     list-style-type: none;
 }
 
-.inner {
-    padding-top: 2.5rem;
-    width: min(80%, 30rem);
-	margin: auto;
-	text-align: center;
-}
-
-#profile-image {
-    width: 6rem;
-    height: 6rem;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.link {
+a {
     text-decoration: none;
     white-space: nowrap;
     overflow: hidden;
@@ -41,4 +32,18 @@ li {
 	box-sizing: border-box;
     border-radius: 0.25rem;
 	margin: 0.675rem 0;
+}
+
+.inner {
+    padding-top: 2.5rem;
+    width: min(80%, 30rem);
+	margin: auto;
+	text-align: center;
+}
+
+#profile-image {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    object-fit: cover;
 }

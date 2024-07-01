@@ -12,38 +12,70 @@
 		<meta property="og:description" content="" />
 		<style>
 			body {
-				color: {{ profile.colour }};
-				background-color: {{ profile.bg-colour }};
+				{% if profile.colour %}
+					color: {{ profile.colour }};
+				{% else %}
+					color: var(--colour);
+				{% endif %}
+
+				{% if profile.bg-colour %}
+					background-color: {{ profile.bg-colour }};
+				{% else %}
+					background-color: var(--bg-colour);
+				{% endif %}
 			}
 
 			a, a:visited {
-				color: {{ profile.colour }};
+				{% if profile.colour %}
+					color: {{ profile.colour }};
+					border: 2px solid {{ profile.colour }};
+				{% else %}
+					color: var(--colour);
+					border: 2px solid var(--colour);
+				{% endif %}
 			}
 
 			a:hover {
-				color: {{ profile.bg_colour }};
-			}
+				{% if profile.bg-colour %}
+					color: {{ profile.bg-colour }};
+				{% else %}
+					color: var(--bg-colour);
+				{% endif %}
 
-			.link {
-				border: 2px solid {{ profile.colour }};
-			}
-
-			.link:hover {
-				background-color: {{ profile.colour }};
-				color: {{ profile.bg-colour }};
+				{% if profile.colour %}
+					background-color: {{ profile.colour }};
+				{% else %}
+					background-color: var(--colour);
+				{% endif %}
 			}
 
 			input {
-				border: 2px solid {{ profile.colour }};
+				{% if profile.colour %}
+					border: 2px solid {{ profile.colour }};
+				{% else %}
+					border: 2px solid var(--colour);
+				{% endif %}
+
 				border-radius: 0.25rem;
 				height: 2rem;
 				box-sizing: border-box;
 			}
 
 			button {
-				background-color: {{ profile.colour }};
-				color: {{ profile.bg-colour }};
-				border: 2px solid {{ profile.colour }};
+				{% if profile.colour %}
+					background-color: {{ profile.colour }};
+					border: 2px solid {{ profile.colour }};
+				{% else %}
+					background-color: var(--colour);
+					border: 2px solid var(--colour);
+				{% endif %}
+
+				{% if profile.bg-colour %}
+					color: {{ profile.bg-colour }};
+				{% else %}
+					color: var(--bg-colour);
+				{% endif %}
+
 				border-radius: 0.25rem;
 				height: 2rem;
 			}

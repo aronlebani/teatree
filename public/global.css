@@ -1,8 +1,8 @@
 :root {
-    --border-colour: #d0d7de;
-	--accent-colour: lightskyblue;
-	--background-colour: white;
-	--shade-colour: #f6f8fa;
+    --border-colour: #244855;
+	--accent-colour: #90aead;
+	--background-colour: floralwhite;
+	--shade-colour: floralwhite;
     --font-colour: #1f2328;
 	--border-radius: 0.25rem;
 	--content-width: 70vw;
@@ -58,6 +58,7 @@ textarea {
     border-radius: 0.25rem;
     padding: 0.5rem;
     margin-bottom: 1rem;
+	background-color: var(--background-colour);
 }
 
 label {
@@ -72,7 +73,7 @@ aside {
 
 #site-header {
     border-bottom: 1px solid var(--border-colour);
-    background-color: var(--accent-colour);
+    background-color: var(--border-colour);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -83,6 +84,10 @@ aside {
     justify-content: space-between;
     padding: 0 0.5rem;
 	box-sizing: border-box;
+}
+
+#site-header * {
+	color: var(--background-colour);
 }
 
 #site-content {
@@ -162,7 +167,7 @@ aside {
 
 .nodecoration {
 	text-decoration: none;
-	color: initial;
+	color: inherit;
 }
 
 /* Index */
@@ -197,10 +202,10 @@ aside {
 
 .colour-blob {
 	display: inline-block;
-	width: 1rem;
+	width: 3rem;
 	height: 1rem;
 	border: 1px solid var(--border-colour);
-	border-radius: 50%;
+	border-radius: 0.5rem;
 }
 
 /* Integration */
