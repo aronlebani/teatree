@@ -267,10 +267,10 @@
   (remove-if-not #'stringp errors))
 
 (defvalidator valid-username? "Invalid username - ~a" (username)
-  (scan "^[a-zA-Z_-]+[a-zA-Z0-9_-]+" username))
+  (scan "^[a-zA-Z_]+[a-zA-Z0-9_-]+" username))
 
 (defvalidator valid-password? "Invalid password" (password)
-  (> (length password) 8))
+  (>= (length password) 8))
 
 (defvalidator valid-colour? "Invalid colour - ~a" (colour)
   (scan "^#{1}[a-fA-F0-9]{6}" colour))

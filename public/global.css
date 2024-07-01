@@ -39,7 +39,7 @@ h1 {
 }
 
 h2 {
-    font-size: 1.125rem;
+    font-size: 1rem;
 }
 
 p {
@@ -93,9 +93,7 @@ aside {
 }
 
 #site-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	text-align: center;
     font-size: 0.75rem;
 	margin: 2rem 0;
 }

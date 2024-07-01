@@ -12,6 +12,7 @@
     (sprintf "public/userdata/~a.~a.~a.~a" area id timestamp ext)))
 
 (defun save-file (tmp-path dest-path)
+  (ensure-directories-exist (relative-path dest-path))
   (copy-file tmp-path (relative-path dest-path)))
 
 ;;; --- Link ---
@@ -166,7 +167,7 @@
              (parse
                (sb-ext:octets-to-string
                  (http-request lists-url
-                               :additional-headers `(("Authorization" . ,(bearer api-key)))))
+                               :additional-headers `(("Authorization" . ,(sprintf "Bearer ~a" api-key)))))
                :as :hash-table))
            (extract-url (res)
              (gethash "subscribe_url_long" (car (gethash "lists" res))))

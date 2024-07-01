@@ -13,7 +13,7 @@ function copy() {
 }
 
 function validatePassword() {
-	const password = document.getElementById("password");
+	const password = document.getElementById("new-password");
 	const confirmPassword = document.getElementById("confirm-password");
 
 	const valid = password.value != confirmPassword.value

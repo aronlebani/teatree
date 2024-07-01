@@ -17,7 +17,6 @@
 (defroute signup/create
           ("/signup" :method :post)
           (&post email password name username)
-  ; todo - currently after signing up, you have to log in again
   (with-validation (combine (not-empty? name)
                             (valid-email? email)
                             (valid-username? username)
