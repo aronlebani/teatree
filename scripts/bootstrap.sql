@@ -20,6 +20,7 @@ CREATE TABLE profiles (
     id INTEGER NOT NULL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     username TEXT UNIQUE NOT NULL,
+	title TEXT,
     colour TEXT,
     bg_colour TEXT,
     image_url TEXT,

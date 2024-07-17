@@ -100,7 +100,13 @@
 					alt="A placeholder for the profile image."
 				/>
 			{% endif %}
-			<h1>{{ profile.username }}</h1>
+			<h1>
+				{% if profile.title %}
+					{{ profile.title }}
+				{% else %}
+					{{ profile.username }}
+				{% endif %}
+			</h1>
 			<ul>
 				{% for link in links %}
 					<li>

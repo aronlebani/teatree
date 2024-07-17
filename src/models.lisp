@@ -53,6 +53,7 @@
   id
   user-id
   username
+  title
   colour
   bg-colour
   image-url
@@ -63,7 +64,7 @@
   updated-at)
 
 (defun new-profile (user-id username)
-  (make-profile nil user-id username nil nil nil nil nil nil nil nil))
+  (make-profile nil user-id username nil nil nil nil nil nil nil nil nil))
 
 (defun find-profile (&key id user-id username)
   (let ((res

@@ -179,9 +179,10 @@
 
 (defroute profile/update
           ("/profile/:id" :method :post :decorators (@auth))
-          (&post colour bg-colour image image-alt css)
+          (&post title colour bg-colour image image-alt css)
   (with-resources ((p (find-profile :id id)))
     (with-permission (:auth-profile id (profile-id p))
+      (setf (profile-title p) title)
       (setf (profile-colour p) colour)
       (setf (profile-bg-colour p) bg-colour)
       (setf (profile-image-alt p) image-alt)

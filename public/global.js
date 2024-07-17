@@ -22,3 +22,10 @@ function validatePassword() {
 
 	confirmPassword.setCustomValidity(valid);
 }
+
+function updateProfileURL() {
+	const username = document.getElementById("username").value;
+	console.log(username)
+	const profileURL = document.getElementById("profile-url");
+	profileURL.innerText = username;
+}
