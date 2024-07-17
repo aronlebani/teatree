@@ -26,27 +26,25 @@
 	{% if profile.image-url %}
 		<img
 			class="profile-image"
-			src="{{ profile.image-url }}"
+			src="/{{ profile.image-url }}"
 			alt="{{ profile.image-alt }}"
 		/>
 	{% else %}
 		<img class="profile-image" src="/public/assets/profile-default.jpg" alt="" />
 	{% endif %}
 	<ul>
-		{% if profile.is-live %}
-			<li>
-				Profile URL
-				<span class="columns">
-					<a id="copy-text" class="mr1" href="https://{{ hostname }}/{{ profile.username }}" target="_blank">
-						https://{{ hostname }}/{{ profile.username }}
-					</a>
-					<span>
-						<button id="copy" type="button" onclick="copy()">Copy</button>
-						<div id="copied">Copied!</div>
-					</span>
+		<li>
+			Profile URL
+			<span class="columns">
+				<a id="copy-text" href="https://{{ hostname }}/{{ profile.username }}" target="_blank">
+					https://{{ hostname }}/{{ profile.username }}
+				</a>
+				<span class="mlh">
+					<img id="copy" role="button" onclick="copy()" src="/public/assets/copy.svg" alt="Copy" />
+					<img id="copied" src="/public/assets/copied.svg" alt="Copied!" />
 				</span>
-			</li>
-		{% endif %}
+			</span>
+		</li>
 		<li>
 			Title
 			<a class="hidden-link" href="/profile/{{ profile.id }}/edit">

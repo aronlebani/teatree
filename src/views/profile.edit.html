@@ -33,6 +33,12 @@
     />
 	<label for="image">Profile image</label>
 	<input type="hidden" name="image-url" value="{{ profile.image-url }}" />
+	<img
+	  class="mb1"
+	  id="profile-image-preview"
+	  src="/{{ profile.image-url }}"
+	  alt="{{ profile.image-alt }}"
+	/>
 	<input
 	  id="image"
 	  type="file"
@@ -40,7 +46,7 @@
 	  accept=".jpg,.jpeg,.png"
 	/>
     <label for="image-alt">Profile image alt text</label>
-	<aside>
+	<aside class="mb1">
 	  Provide a descriptive and concise description of your profile image. This
 	  helps visually impaired users who use screen readers to hear a description
 	  of the image.
@@ -59,3 +65,10 @@
     </footer>
   </form>
 {% endblock content %}
+
+{% block script %}
+	document.getElementById("image").onchange = function () {
+		const src = URL.createObjectURL(this.files[0]);
+		document.getElementById("profile-image-preview").src = src
+	}
+{% endblock script %}

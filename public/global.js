@@ -25,7 +25,5 @@ function validatePassword() {
 
 function updateProfileURL() {
 	const username = document.getElementById("username").value;
-	console.log(username)
-	const profileURL = document.getElementById("profile-url");
-	profileURL.innerText = username;
+	document.getElementById("profile-url").innerText = username;
 }

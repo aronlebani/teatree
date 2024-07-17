@@ -62,7 +62,15 @@ textarea {
 }
 
 input[type="color"] {
-    padding: 0;
+    padding: initial;
+}
+
+input[type="file"] {
+    outline: initial;
+    border: initial;
+    border-radius: initial;
+    padding: initial;
+	background-color: initial;
 }
 
 label {
@@ -199,6 +207,14 @@ aside {
 	margin-right: 1rem;
 }
 
+.mb1 {
+	margin-bottom: 1rem;
+}
+
+.mt1 {
+	margin-top: 1rem;
+}
+
 .hidden-link {
 	text-decoration: none;
 	color: inherit;
@@ -217,8 +233,6 @@ aside {
 	margin-bottom: 1rem;	/* Match margin on input */
 }
 
-/* User */
-
 /* Profile */
 
 .profile-image {
@@ -229,7 +243,15 @@ aside {
 	border: 1px solid var(--border-colour);
 }
 
+#copy {
+	height: 1.5rem;
+	color: var(--border-colour);
+	cursor: pointer;
+}
+
 #copied {
+	height: 1.5rem;
+	color: var(--border-colour);
 	display: none;
 }
 
@@ -239,6 +261,16 @@ aside {
 	height: 1rem;
 	border: 1px solid var(--border-colour);
 	border-radius: 0.5rem;
+}
+
+/* Edit Profile */
+
+#profile-image-preview {
+	width: 6rem;
+	height: 6rem;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 1px solid var(--border-colour);
 }
 
 /* Integration */

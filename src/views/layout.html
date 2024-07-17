@@ -1,36 +1,40 @@
 <!doctype html>
 
 <html lang="en">
-<head>
-  {% block head %}
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="/public/global.css">
-	<script type="text/javascript" src="/public/global.js"></script>
-	<title>Teatree</title>
-	<meta property="og:title" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:type" content="website" />
-	<meta property="og:description" content="" />
-  {% endblock head %}
-</head>
-<body>
-  <header id="site-header">
-    <a class="nodecoration" href="/">
-	  <h1>Teatree</h1>
-	</a>
-    <a href="/logout">Log out</a>
-  </header>
-  <main id="site-content">
-    {% block content %}
-    {% endblock content %}
-  </main>
-  <footer id="site-footer">
-	Made by Aron Lebani, <a href="mailto:aron@lebani.dev">aron@lebani.dev</a>.
-	<br />
-	This software is free and open-source &mdash; <a href="https://github.com/aronlebani/teatree" target="_blank">view source</a>.
-	<br />
-	If you find Teatree useful, please consider making a <a href="https://www.paypal.com/donate/?hosted_button_id=WDXMN26JPFAXL" target="_blank">small donation</a>.
-  </footer>
-</body>
+  <head>
+    {% block head %}
+  	<meta charset="utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<link rel="stylesheet" href="/public/global.css">
+  	<script type="text/javascript" src="/public/global.js"></script>
+  	<title>Teatree</title>
+  	<meta property="og:title" content="" />
+  	<meta property="og:url" content="" />
+  	<meta property="og:type" content="website" />
+  	<meta property="og:description" content="" />
+    {% endblock head %}
+  </head>
+  <body>
+    <header id="site-header">
+      <a class="nodecoration" href="/">
+		<h1>Teatree</h1>
+	  </a>
+      <a href="/logout">Log out</a>
+    </header>
+    <main id="site-content">
+      {% block content %}
+      {% endblock content %}
+    </main>
+    <footer id="site-footer">
+	  Made by Aron Lebani, <a href="mailto:aron@lebani.dev">aron@lebani.dev</a>.
+	  <br />
+  	  This software is free and open-source &mdash; <a href="https://github.com/aronlebani/teatree" target="_blank">view source</a>.
+  	  <br />
+  	  If you find Teatree useful, please consider making a <a href="https://www.paypal.com/donate/?hosted_button_id=WDXMN26JPFAXL" target="_blank">small donation</a>.
+    </footer>
+  </body>
+  <script>
+    {% block script %}
+    {% endblock script %}
+  </script>
 </html>
