@@ -5,9 +5,9 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="/public/public-profile.css">
-		<title>{{ profile.username }}</title>
-		<meta property="og:title" content="" />
-		<meta property="og:url" content="" />
+		<title>{% if profile.title %} {{ profile.title }} {% else %} {{ profile.username }} {% endif %}</title>
+		<meta property="og:title" content="{% if profile.title %} {{ profile.title }} {% else %} {{ profile.username }} {% endif %}" />
+		<meta property="og:url" content="https://teatr.ee/{{ profile.username }}" />
 		<meta property="og:type" content="website" />
 		<meta property="og:description" content="" />
 		<style>
@@ -127,7 +127,7 @@
 						placeholder="Subscribe to my mailing list!"
 						required
 					/>
-					<button type="submit">Submit</button>
+					<button type="submit">Save</button>
 				</form>
 			{% endif %}
 		</div>

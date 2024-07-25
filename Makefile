@@ -18,6 +18,10 @@ clean:
 	rm *.fasl
 
 deploy:
-	rsync -rvsp --delete --progress \
-		README.md LICENSE teatree.asd Makefile scripts src public ${SERVER}:${DEST}
+	rsync -rvsp \
+		--delete \
+		--progress \
+		--exclude public/userdata \
+		README.md LICENSE teatree.asd Makefile scripts src public \
+		${SERVER}:${DEST}
 	ssh ${SERVER} 'systemctl restart teatree.service'
