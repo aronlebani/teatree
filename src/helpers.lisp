@@ -234,12 +234,7 @@
 
 (defmacro render (name &rest objects)
   "Render the template name with the given objects."
-  `(render-template* (gethash ,name *templates*)
-                     nil
-                     ,@(loop for obj in objects and i from 0
-                             collect (if (evenp i)
-                                         obj
-                                         `(struct->alist ,obj)))))
+  `(render-template* (gethash ,name *templates*) nil objects))
 
 ;;; --- Filesystem ---
 
@@ -309,15 +304,6 @@
 (defun insert-after (lst index element)
   (push element (cdr (nthcdr index lst)))
   lst)
-
-(defun struct->alist (struct)
-  (if (listp struct)
-      (mapcar #'struct->alist struct)
-      (if (ignore-errors (model? struct))
-          (loop for slot in (slot-names struct)
-                collect (cons slot
-                              (slot-value struct slot)))
-          struct)))
 
 (defun html-file? (file)
   (equal (pathname-type file) "html"))
