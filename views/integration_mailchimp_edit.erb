@@ -1,0 +1,39 @@
+<form
+  class="container full-screen-form"
+  action="/integration/<%= integration['id'] %>/mailchimp"
+  method="post"
+>
+  <header>
+    <h2>Set up Mailchimp integration</h2>
+  </header>
+  <h2>Steps</h2>
+  <ol>
+    <li>Log into Mailchimp.</li>
+    <li>Click your username, select Account, and navigate to the API keys screen.</li>
+    <li>Hit Extras and select API Keys.</li>
+    <li>Scroll down and select Create a Key.</li>
+    <li>Copy the newly generated Key, and paste it into the field below.</li>
+  </ol>
+  <aside class="mailchimp-note">
+    Note that if you have multiple mailing lists, subscribers will
+    automatically be subscribed to the first list.
+  </aside>
+  <label for="mailchimp-api-key">Mailchimp API key*</label>
+  <input
+    id="mailchimp-api-key"
+    type="text"
+    name="mailchimp_api_key"
+    value=""
+    required
+  />
+  <p>
+    <small>
+      *This is only used to enable the integration. We don't store your API
+      key on our server.
+    </small>
+  </p>
+  <footer>
+    <a href="/admin">Back</a>
+    <button type="submit">Save</button>
+  </footer>
+</form>

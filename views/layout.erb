@@ -1,0 +1,42 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+  	<meta charset="utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<link rel="stylesheet" href="/global.css">
+  	<script type="text/javascript" src="/global.js"></script>
+  	<title>Teatree</title>
+  	<meta property="og:title" content="Teatree" />
+  	<meta property="og:url" content="https://teatr.ee" />
+  	<meta property="og:type" content="website" />
+  	<meta property="og:description" content="A landing page for your online world" />
+  </head>
+  <body>
+    <header id="site-header">
+			<a class="nodecoration" href="/">
+				<h1>Teatree</h1>
+			</a>
+			<a href="/logout">Log out</a>
+    </header>
+    <main id="site-content">
+      <%= yield %>
+    </main>
+    <footer id="site-footer">
+			Made by Aron Lebani, <a href="mailto:aron@lebani.dev">aron@lebani.dev</a>.
+			<br />
+  	  This software is free and open-source &mdash; <a href="https://github.com/aronlebani/teatree" target="_blank">view source</a>.
+  	  <br />
+  	  If you find Teatree useful, please consider making a <a href="https://www.paypal.com/donate/?hosted_button_id=WDXMN26JPFAXL" target="_blank">small donation</a>.
+    </footer>
+  </body>
+  <script>
+    const image = document.getElementById("image")
+    if (image) {
+      image.onchange = function () {
+        const src = URL.createObjectURL(this.files[0]);
+        document.getElementById("profile-image-preview").src = src
+      }
+    }
+  </script>
+</html>

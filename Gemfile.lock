@@ -1,0 +1,53 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    base64 (0.2.0)
+    bcrypt (3.1.20)
+    dotenv (3.1.2)
+    mini_portile2 (2.8.7)
+    mustermann (3.0.2)
+      ruby2_keywords (~> 0.0.1)
+    net-protocol (0.2.2)
+      timeout
+    net-smtp (0.5.0)
+      net-protocol
+    nio4r (2.7.3)
+    puma (6.4.2)
+      nio4r (~> 2.0)
+    rack (3.1.7)
+    rack-protection (4.0.0)
+      base64 (>= 0.1.0)
+      rack (>= 3.0.0, < 4)
+    rack-session (2.0.0)
+      rack (>= 3.0.0)
+    rackup (2.1.0)
+      rack (>= 3)
+      webrick (~> 1.8)
+    ruby2_keywords (0.0.5)
+    sinatra (4.0.0)
+      mustermann (~> 3.0)
+      rack (>= 3.0.0, < 4)
+      rack-protection (= 4.0.0)
+      rack-session (>= 2.0.0, < 3)
+      tilt (~> 2.0)
+    sqlite3 (2.0.4)
+      mini_portile2 (~> 2.8.0)
+    tilt (2.4.0)
+    timeout (0.4.1)
+    webrick (1.8.1)
+
+PLATFORMS
+  amd64-freebsd-14
+  ruby
+
+DEPENDENCIES
+  bcrypt
+  dotenv
+  net-smtp
+  puma
+  rackup
+  sinatra
+  sqlite3
+
+BUNDLED WITH
+   2.5.9

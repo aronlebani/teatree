@@ -1,0 +1,131 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="/public-profile.css">
+		<title><%= profile['title'] || profile['username'] %></title>
+		<meta property="og:title" content="<%= profile['title'] || profile['username'] %>" />
+		<meta property="og:url" content="https://teatr.ee/<%= profile['username'] %>" />
+		<meta property="og:type" content="website" />
+		<meta property="og:description" content="" />
+		<style>
+			body {
+				<% if profile['colour'] %>
+					color: <%= profile['colour'] %>;
+				<% else %>
+					color: var(--colour);
+				<% end %>
+
+				<% if profile['bg_colour'] %>
+					background-color: <%= profile['bg_colour'] %>;
+				<% else %>
+					background-color: var(--bg-colour);
+				<% end %>
+			}
+
+			a, a:visited {
+				<% if profile['colour'] %>
+					color: <%= profile['colour'] %>;
+					border: 2px solid <%= profile['colour'] %>;
+				<% else %>
+					color: var(--colour);
+					border: 2px solid var(--colour);
+				<% end %>
+			}
+
+			a:hover {
+				<% if profile['bg_colour'] %>
+					color: <%= profile['bg_colour'] %>;
+				<% else %>
+					color: var(--bg-colour);
+				<% end %>
+
+				<% if profile['colour'] %>
+					background-color: <%= profile['colour'] %>;
+				<% else %>
+					background-color: var(--colour);
+				<% end %>
+			}
+
+			input {
+				<% if profile['colour'] %>
+					border: 2px solid <%= profile['colour'] %>;
+				<% else %>
+					border: 2px solid var(--colour);
+				<% end %>
+
+				border-radius: 0.25rem;
+				height: 2rem;
+				box-sizing: border-box;
+			}
+
+			button {
+				<% if profile['colour'] %>
+					background-color: <%= profile['colour'] %>;
+					border: 2px solid <%= profile['colour'] %>;
+				<% else %>
+					background-color: var(--colour);
+					border: 2px solid var(--colour);
+				<% end %>
+
+				<% if profile['bg_colour'] %>
+					color: <%= profile['bg_colour'] %>;
+				<% else %>
+					color: var(--bg-colour);
+				<% end %>
+
+				border-radius: 0.25rem;
+				height: 2rem;
+			}
+
+			/* user-defined css */
+
+			<%= profile['css'] %>
+		</style>
+	</head>
+	<body>
+		<div class="inner">
+			<% if profile['image_url'] %>
+				<img
+					id="profile-image"
+					src="/<%= profile['image_url']%>"
+					alt="<%= profile['image_alt'] %>"
+				/>
+			<% else %>
+				<img
+					id="profile-image"
+					src="/assets/profile-default.jpg"
+					alt="A placeholder for the profile image."
+				/>
+			<% end %>
+			<h1>
+				<%= profile['title'] || profile['username'] %>
+			</h1>
+			<ul>
+				<% for link in links %>
+					<li>
+						<a class="link" href="<%= link['href'] %>" target="_blank"><%= link['title'] %></a>
+					</li>
+				<% end %>
+			</ul>
+      <% if integration['mailchimp_subscribe_url'] %>
+				<form
+					action="<%= integration['mailchimp_subscribe_url'] %>"
+					method="post"
+					target="_blank"
+				>
+					<input
+						type="email"
+						name="EMAIL"
+						value=""
+						placeholder="Subscribe to my mailing list!"
+						required
+					/>
+					<button type="submit">Subscribe</button>
+				</form>
+			<% end %>
+		</div>
+	</body>
+</html>
