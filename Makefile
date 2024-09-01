@@ -2,6 +2,10 @@ include .env
 
 RUBY ?= ruby
 
+.PHONY: install
+install:
+	bundle install
+
 .PHONY: debug
 debug:
 	$(RUBY) main.rb -e development -p $(PORT)

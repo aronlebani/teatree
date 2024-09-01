@@ -67,13 +67,13 @@ CREATE TABLE pw_reset_requests (
 -- Start PRIMARY KEY from 1001
 
 INSERT INTO users (id, name, email, password)
-values (1000, 'example', 'example', 'example');
+VALUES (1000, 'example', 'example', 'example');
 
 INSERT INTO profiles (id, user_id, username)
-values (1000, 1000, 'example');
+VALUES (1000, 1000, 'example');
 
 INSERT INTO links (id, profile_id, title, href)
-values (1000, 1000, 'example', 'example');
+VALUES (1000, 1000, 'example', 'example');
 
 INSERT INTO integrations (id, profile_id)
-values (1000, 1000);
+VALUES (1000, 1000);

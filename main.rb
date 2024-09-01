@@ -13,8 +13,8 @@ require 'uri'
 
 Dotenv.load
 
-enable :sessions
-
+set :sessions, true
+set :logging, true
 set :session_secret, ENV['SESSION_SECRET'] || SecureRandom.hex(64)
 set :public_folder, File.join(__dir__, 'public')
 set :views, File.join(__dir__, 'views')
