@@ -12,17 +12,6 @@ function copy() {
 	}, 2000);
 }
 
-function validatePassword() {
-	const password = document.getElementById("new-password");
-	const confirmPassword = document.getElementById("confirm-password");
-
-	const valid = password.value != confirmPassword.value
-		? "Passwords don't match"
-		: "";
-
-	confirmPassword.setCustomValidity(valid);
-}
-
 function updateProfileURL() {
 	const username = document.getElementById("username").value;
 	document.getElementById("profile-url").innerText = username;

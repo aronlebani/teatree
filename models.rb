@@ -1,105 +1,5 @@
 # frozen_string_literal: true
 
-# --- Profile ---
-
-def find_profile(id)
-  rows = DB.execute <<~SQL, [id]
-    SELECT id, user_id, title, username, colour, bg_colour, image_url,
-           image_alt, is_live, css, created_at, updated_at
-      FROM profiles
-     WHERE id = ?
-  SQL
-
-  rows[0]
-end
-
-def find_profile_by_user_id(user_id)
-  rows = DB.execute <<~SQL, [user_id]
-    SELECT id, user_id, title, username, colour, bg_colour, image_url,
-           image_alt, is_live, css, created_at, updated_at
-      FROM profiles
-     WHERE user_id = ?
-  SQL
-
-  rows[0]
-end
-
-def find_public_profile(username)
-  rows = DB.execute <<~SQL, [username]
-    SELECT id, title, username, colour, bg_colour, image_url, image_alt,
-           is_live, css
-      FROM profiles
-     WHERE username = ?
-  SQL
-
-  rows[0]
-end
-
-def create_profile(user_id, username)
-  rows = DB.execute <<~SQL, [user_id, username, now, now]
-    INSERT INTO profiles (user_id, username, created_at, updated_at)
-         VALUES (?, ?, ?, ?)
-      RETURNING id
-  SQL
-
-  rows[0]['id']
-end
-
-def update_profile(id, title, colour, bg_colour, image_alt, css)
-  rows = DB.execute <<~SQL, [title, colour, bg_colour, image_alt, css, now, id]
-       UPDATE profiles
-          SET title = ?,
-              colour = ?,
-              bg_colour = ?,
-              image_alt = ?,
-              css = ?,
-              updated_at = ?
-        WHERE id = ?
-    RETURNING id
-  SQL
-
-  rows[0]['id']
-end
-
-def update_profile_image(id, filename, tempfile)
-  userdata_path = make_userdata_path filename, 'profile', id
-  FileUtils.cp tempfile.path, userdata_path
-
-  rows = DB.execute <<~SQL, [userdata_path, now, id]
-       UPDATE profiles
-          SET image_url = ?,
-              updated_at = ?
-        WHERE id = ?
-    RETURNING id
-  SQL
-
-  rows[0]['id']
-end
-
-def update_profile_live(id)
-  rows = DB.execute <<~SQL, [now, id]
-       UPDATE profiles
-          SET is_live = 1,
-              updated_at = ?
-        WHERE id = ?
-    RETURNING id
-  SQL
-
-  rows[0]['id']
-end
-
-def show_public_profile?(is_live, profile_id, session_profile_id)
-  if is_live == 1
-    return true
-  else
-    return session_profile_id && session_profile_id == profile_id
-  end
-end
-
-def valid_profile?(colour, bg_colour)
-  (!colour || valid_colour?(colour)) && (!bg_colour || valid_colour?(bg_colour))
-end
-
 # --- User ---
 
 def find_user(id)
@@ -211,70 +111,28 @@ def existing_email_not_mine?(email, my_id)
   rows[0]
 end
 
-def should_log_in?(hash, guess)
+def authenticated?(hash, guess)
   hashed = BCrypt::Password.new hash
   hashed == guess
 end
 
-def valid_user?(name, email)
-  !name.empty? && valid_email?(email)
+def validate_user(email)
+  [invalid_email?(email)].compact
 end
 
-# --- Integration ---
-
-def find_integration(id)
-  rows = DB.execute <<~SQL, [id]
-    SELECT id, profile_id, mailchimp_subscribe_url, created_at, updated_at
-      FROM integrations
-     WHERE id = ?
-  SQL
-
-  rows[0]
+def validate_signup(email, username, password)
+  [
+    invalid_email?(email),
+    invalid_username?(username),
+    invalid_password?(password),
+  ].compact
 end
 
-def find_public_integration(username)
-  rows = DB.execute <<~SQL, [username]
-        SELECT i.mailchimp_subscribe_url
-          FROM integrations i
-    INNER JOIN profiles p ON i.profile_id = p.id
-         WHERE p.username = ?
-  SQL
-
-  rows[0]
-end
-
-def create_integration(profile_id)
-  rows = DB.execute <<~SQL, [profile_id, now, now]
-    INSERT INTO integrations (profile_id, created_at, updated_at)
-         VALUES (?, ?, ?)
-      RETURNING id
-  SQL
-
-  rows[0]['id']
-end
-
-def update_integration(id, subscribe_url)
-  rows = DB.execute <<~SQL, [subscribe_url, now, id]
-       UPDATE integrations
-          SET mailchimp_subscribe_url = ?,
-              updated_at = ?
-        WHERE id = ?
-    RETURNING id
-  SQL
-
-  rows[0]['id']
-end
-
-def get_subscribe_url(api_key)
-  region = api_key.split('-')[1]
-  lists_url = URI("https://#{region}.api.mailchimp.com/3.0/lists")
-  headers = { 'Authorization': "Bearer #{api_key}" }
-
-  response = Net::HTTP.get lists_url, headers
-  url = JSON.parse(response)['lists'][0]['subscribe_url_long']
-  parts = url.split '?'
-
-  "#{parts[0]}/post?#{parts[1]}"
+def validate_change_password(new_password, confirm_password)
+  [
+    invalid_password?(new_password),
+    if confirm_password != new_password then 'Passwords must match.' end
+  ].compact
 end
 
 # --- Link ---
@@ -336,8 +194,169 @@ def delete_link(id)
   SQL
 end
 
-def valid_link?(title, href)
-  !title.empty? && valid_url?(href)
+def validate_link(href)
+  [invalid_url?(href)].compact
+end
+
+# --- Profile ---
+
+def find_profile(id)
+  rows = DB.execute <<~SQL, [id]
+    SELECT id, user_id, title, username, colour, bg_colour, image_url,
+           image_alt, is_live, css, created_at, updated_at
+      FROM profiles
+     WHERE id = ?
+  SQL
+
+  rows[0]
+end
+
+def find_profile_by_user_id(user_id)
+  rows = DB.execute <<~SQL, [user_id]
+    SELECT id, user_id, title, username, colour, bg_colour, image_url,
+           image_alt, is_live, css, created_at, updated_at
+      FROM profiles
+     WHERE user_id = ?
+  SQL
+
+  rows[0]
+end
+
+def find_public_profile(username)
+  rows = DB.execute <<~SQL, [username]
+    SELECT id, title, username, colour, bg_colour, image_url, image_alt,
+           is_live, css
+      FROM profiles
+     WHERE username = ?
+  SQL
+
+  rows[0]
+end
+
+def create_profile(user_id, username)
+  rows = DB.execute <<~SQL, [user_id, username, now, now]
+    INSERT INTO profiles (user_id, username, created_at, updated_at)
+         VALUES (?, ?, ?, ?)
+      RETURNING id
+  SQL
+
+  rows[0]['id']
+end
+
+def update_profile(id, title, colour, bg_colour, image_alt, css)
+  rows = DB.execute <<~SQL, [title, colour, bg_colour, image_alt, css, now, id]
+       UPDATE profiles
+          SET title = ?,
+              colour = ?,
+              bg_colour = ?,
+              image_alt = ?,
+              css = ?,
+              updated_at = ?
+        WHERE id = ?
+    RETURNING id
+  SQL
+
+  rows[0]['id']
+end
+
+def update_profile_image(id, filename, tempfile)
+  userdata_path = make_userdata_path filename, 'profile', id
+  FileUtils.cp tempfile.path, userdata_path
+
+  rows = DB.execute <<~SQL, [userdata_path, now, id]
+       UPDATE profiles
+          SET image_url = ?,
+              updated_at = ?
+        WHERE id = ?
+    RETURNING id
+  SQL
+
+  rows[0]['id']
+end
+
+def update_profile_live(id)
+  rows = DB.execute <<~SQL, [now, id]
+       UPDATE profiles
+          SET is_live = 1,
+              updated_at = ?
+        WHERE id = ?
+    RETURNING id
+  SQL
+
+  rows[0]['id']
+end
+
+def show_public_profile?(is_live, profile_id, session_profile_id)
+  if is_live == 1
+    return true
+  else
+    return session_profile_id && session_profile_id == profile_id
+  end
+end
+
+def validate_profile(image_url, colour, bg_colour)
+  [
+    if image_url then invalid_image?(image_url) end,
+    if colour then invalid_colour?(colour) end,
+    if bg_colour then invalid_colour?(bg_colour) end,
+  ].compact
+end
+
+# --- Integration ---
+
+def find_integration(id)
+  rows = DB.execute <<~SQL, [id]
+    SELECT id, profile_id, mailchimp_subscribe_url, created_at, updated_at
+      FROM integrations
+     WHERE id = ?
+  SQL
+
+  rows[0]
+end
+
+def find_public_integration(username)
+  rows = DB.execute <<~SQL, [username]
+        SELECT i.mailchimp_subscribe_url
+          FROM integrations i
+    INNER JOIN profiles p ON i.profile_id = p.id
+         WHERE p.username = ?
+  SQL
+
+  rows[0]
+end
+
+def create_integration(profile_id)
+  rows = DB.execute <<~SQL, [profile_id, now, now]
+    INSERT INTO integrations (profile_id, created_at, updated_at)
+         VALUES (?, ?, ?)
+      RETURNING id
+  SQL
+
+  rows[0]['id']
+end
+
+def update_integration(id, subscribe_url)
+  rows = DB.execute <<~SQL, [subscribe_url, now, id]
+       UPDATE integrations
+          SET mailchimp_subscribe_url = ?,
+              updated_at = ?
+        WHERE id = ?
+    RETURNING id
+  SQL
+
+  rows[0]['id']
+end
+
+def get_subscribe_url(api_key)
+  region = api_key.split('-')[1]
+  lists_url = URI("https://#{region}.api.mailchimp.com/3.0/lists")
+  headers = { 'Authorization': "Bearer #{api_key}" }
+
+  response = Net::HTTP.get lists_url, headers
+  url = JSON.parse(response)['lists'][0]['subscribe_url_long']
+  parts = url.split '?'
+
+  "#{parts[0]}/post?#{parts[1]}"
 end
 
 # --- Password reset request ---

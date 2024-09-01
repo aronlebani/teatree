@@ -3,18 +3,15 @@
     <h2>Sign up</h2>
   </header>
   <label for="name">Name</label>
-  <input id="name" type="text" name="name" required />
+  <input id="name" name="name" required />
   <label for="email">Email</label>
-  <input id="email" type="email" name="email" required />
+  <input id="email" name="email" required />
   <label for="username">Profile URL</label>
   <div class="columns distribute">
     <input
       id="username"
-      type="text"
       name="username"
       required
-      pattern="^[a-zA-Z_]+[a-zA-Z0-9_\-]+"
-      title="This can be a combination of letters, numbers, and underscores. The first character must be a letter or underscore."
       oninput="updateProfileURL()"
     />
     <div id="profile-url-container">
@@ -22,7 +19,10 @@
     </div>
   </div>
   <label for="password">Password</label>
-  <input id="password" type="password" name="password" required minlength="8"/>
+  <input id="password" type="password" name="password" required />
+  <% if flash['errors'] %>
+    <small class="error"><%= flash['errors'].join('<br>') %></small>
+  <% end%>
   <footer>
     <small>Already have an account? <a href="/login">Log in here</a>.</small>
     <button type="submit">Sign up</button>

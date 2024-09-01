@@ -7,9 +7,12 @@
     <h2>New link</h2>
   </header>
   <label for="title">Title</label>
-  <input id="title" type="text" name="title" value="" required />
+  <input id="title" name="title" value="" required />
   <label for="href">URL</label>
-  <input id="href" type="url" name="href" value="" required />
+  <input id="href" name="href" value="" required />
+  <% if flash['errors'] %>
+    <small class="error"><%= flash['errors'].join('<br>') %></small>
+  <% end%>
   <footer>
     <a href="/admin">Back</a>
     <button type="submit">Add</button>

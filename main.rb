@@ -8,6 +8,7 @@ require 'net/http'
 require 'net/smtp'
 require 'securerandom'
 require 'sinatra'
+require 'sinatra/flash'
 require 'sqlite3'
 require 'uri'
 

@@ -13,14 +13,17 @@ get '/signup' do
 end
 
 post '/signup' do
-  if !valid_user? params['name'], params['email']
-    return 400
-  elsif !valid_username? params['username']
-    return 400
+  errors = validate_signup params['email'], params['username'], params['password']
+
+  if !errors.empty?
+    flash['errors'] = errors
+    redirect '/signup'
   elsif email_exists? params['email']
-    return [409, "The email address #{params['email']} is already registered."]
+    flash['errors'] = ['Email address is already registered.']
+    redirect '/signup'
   elsif username_exists? params['username']
-    return [409, "The username #{params['username']} is already registered."]
+    flash['errors'] = ['Username is already registered.']
+    redirect '/signup'
   end
 
   user_id = create_user params['name'], params['email'], params['password']
@@ -43,12 +46,15 @@ post '/login' do
   user = find_auth_user_by_email params['email']
 
   if !user
-    return [401, 'Incorrect username or password.']
-  elsif !should_log_in? user['password'], params['password']
-    return [401, 'Incorrect username or password.']
+    flash['errors'] = ['Incorrect username or password.']
+    redirect '/login'
+  elsif !authenticated? user['password'], params['password']
+    flash['errors'] = ['Incorrect username or password.']
+    redirect '/login'
   end
 
   profile = find_profile_by_user_id user['id']
+
   session['user_id'] = user['id']
   session['profile_id'] = profile['id']
 
@@ -97,13 +103,16 @@ end
 post '/forgot-password/:uuid' do
   prr = find_pw_reset_request params['uuid']
 
+  errors = validate_change_password params['new_password'], params['confirm_password']
+
   if !prr
     return 404
-  elsif !valid_password? params['password']
-    return 400
+  elsif !errors.empty?
+    flash['errors'] = errors
+    redirect "/forgot-password/#{params['uuid']}"
   end
   
-  update_user_password prr['user_id'], params['password']
+  update_user_password prr['user_id'], params['new_password']
 
   redirect '/login'
 end
@@ -149,8 +158,11 @@ get '/link/new' do
 end
 
 post '/link' do
-  if !valid_link? params['title'], params['href']
-    return 400
+  errors = validate_link params['href']
+
+  if !errors.empty?
+    flash['errors'] = errors
+    redirect '/link/new'
   end
 
   create_link session['profile_id'], params['title'], params['href']
@@ -173,12 +185,15 @@ end
 post '/link/:id' do
   link = find_link params['id']
 
+  errors = validate_link params['href']
+
   if !link
     return 404
   elsif link['profile_id'] != session['profile_id']
     return 403
-  elsif !valid_link? params['title'], params['href']
-    return 400
+  elsif !errors.empty?
+    flash['errors'] = errors
+    redirect "/link/#{params['id']}/edit"
   end
 
   update_link link['id'], params['title'], params['href']
@@ -217,12 +232,15 @@ end
 post '/profile/:id' do
   profile = find_profile params['id']
 
+  errors = validate_profile params['image'][:filename], params['colour'], params['bg_colour']
+
   if !profile
     return 404
   elsif profile['id'] != session['profile_id']
     return 403
-  elsif !valid_profile? params['colour'], params['bg_colour']
-    return 400
+  elsif !errors.empty?
+    flash['errors'] = errors
+    redirect "/profile/#{params['id']}/edit"
   end
 
   update_profile params['id'], params['title'], params['colour'], params['bg_colour'], params['image_alt'], params['css']
@@ -265,14 +283,18 @@ end
 post '/user/:id' do
   user = find_user params['id']
 
+  errors = validate_user params['email']
+
   if !user
     return 404
   elsif user['id'] != session['user_id']
     return 403
-  elsif !valid_user? params['name'], params['email']
-    return 400
+  elsif !errors.empty?
+    flash['errors'] = errors
+    redirect "/user/#{params['id']}/edit"
   elsif existing_email_not_mine? params['email'], user['id']
-    return [409, "The email #{params['email']} is already in use."]
+    flash['errors'] = ["The email #{params['email']} is already in use."]
+    redirect "/user/#{params['id']}/edit"
   end
 
   update_user user['id'], params['name'], params['email']
@@ -289,17 +311,20 @@ end
 post '/change-password' do
   user = find_auth_user session['user_id']
 
+  errors = validate_change_password params['new_password'], params['confirm_password']
+
   if !user
     return 404
-  elsif !valid_password? params['new_password']
-    return 400
-  end
-
-  if !should_log_in? user['password'], params['old_password']
-    return [401, 'Incorrect password']
+  elsif !errors.empty?
+    flash['errors'] = errors
+    redirect '/change-password'
+  elsif !authenticated? user['password'], params['old_password']
+    flash['errors'] = ['Incorrect password']
+    redirect '/change-password'
   end
 
   update_user_password user['id'], params['new_password']
+
   session['user_id'] = nil
   session['profile_id'] = nil
 
@@ -335,7 +360,8 @@ post '/integration/:id/mailchimp' do
     subscribe_url = get_subscribe_url params['mailchimp_api_key']
     update_integration integration['id'], subscribe_url
   rescue
-    return [400, 'Could not parse API key.']
+    flash['errors'] = ['Could not parse API key.']
+    redirect "/ingetration/#{params['id']}/mailchimp/edit"
   end
 
   redirect '/admin'
@@ -371,10 +397,6 @@ before /\/change-password|\/admin|\/profile\/.*|\/link\/.*|\/user\/.*/ do
 end
 
 # --- Error handlers ---
-
-error 400 do
-  "Invalid request."
-end
 
 error 403 do
   "Unauthorized."

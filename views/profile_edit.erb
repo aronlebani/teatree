@@ -8,26 +8,11 @@
     <h2>Edit profile</h2>
   </header>
   <label for="title">Title</label>
-  <input
-    id="title"
-    type="text"
-    name="title"
-    value="<%= @profile['title'] %>"
-  />
+  <input id="title" name="title" value="<%= @profile['title'] %>" />
   <label for="colour">Primary colour</label>
-  <input
-    id="colour"
-    type="color"
-    name="colour"
-    value="<%= @profile['colour'] %>"
-  />
+  <input id="colour" type="color" name="colour" value="<%= @profile['colour'] %>" />
   <label for="bg-colour">Background colour</label>
-  <input
-    id="bg-colour"
-    type="color"
-    name="bg_colour"
-    value="<%= @profile['bg_colour'] %>"
-  />
+  <input id="bg-colour" type="color" name="bg_colour" value="<%= @profile['bg_colour'] %>" />
   <label for="image">Profile image</label>
   <input type="hidden" name="image_url" value="<%= @profile['image_url'] %>" />
   <img
@@ -36,26 +21,19 @@
     src="/<%= @profile['image_url'] %>"
     alt="<%= @profile['image_alt'] %>"
   />
-  <input
-    id="image"
-    type="file"
-    name="image"
-    accept=".jpg,.jpeg,.png"
-  />
+  <input id="image" type="file" name="image" />
   <label for="image-alt">Profile image alt text</label>
   <aside class="mb1">
     Provide a descriptive and concise description of your profile image. This
     helps visually impaired users who use screen readers to hear a description
     of the image.
   </aside>
-  <input
-    id="image-alt"
-    type="text"
-    name="image_alt"
-    value="<%= @profile['image_alt'] %>"
-  />
+  <input id="image-alt" name="image_alt" value="<%= @profile['image_alt'] %>" />
   <label for="css">Custom CSS</label>
   <textarea id="css" name="css" rows="4"><%= @profile['css'] %></textarea>
+  <% if flash['errors'] %>
+    <small class="error"><%= flash['errors'].join('<br>') %></small>
+  <% end%>
   <footer>
     <a href="/admin">Back</a>
     <button type="submit">Save</button>

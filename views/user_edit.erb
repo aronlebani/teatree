@@ -3,12 +3,15 @@
     <h2>Edit your details</h2>
   </header>
   <label for="name">Name</label>
-  <input id="name" type="text" name="name" value="<%= @user['name'] %>" required />
+  <input id="name" name="name" value="<%= @user['name'] %>" required />
   <label for="email">Email</label>
-  <input id="email" type="email" name="email" value="<%= @user['email'] %>" required />
+  <input id="email" name="email" value="<%= @user['email'] %>" required />
   <label for="password">Password</label>
   <input  id="password" value="********" disabled />
   <a href="/change-password">Change password</a>
+  <% if flash['errors'] %>
+    <small class="error"><%= flash['errors'].join('<br>') %></small>
+  <% end%>
   <footer>
     <a href="/admin">Back</a>
     <button type="submit">Save</button>

@@ -19,19 +19,16 @@
     automatically be subscribed to the first list.
   </aside>
   <label for="mailchimp-api-key">Mailchimp API key*</label>
-  <input
-    id="mailchimp-api-key"
-    type="text"
-    name="mailchimp_api_key"
-    value=""
-    required
-  />
+  <input id="mailchimp-api-key" name="mailchimp_api_key" required />
   <p>
     <small>
       *This is only used to enable the integration. We don't store your API
       key on our server.
     </small>
   </p>
+  <% if flash['errors'] %>
+    <small class="error"><%= flash['errors'].join('<br>') %></small>
+  <% end%>
   <footer>
     <a href="/admin">Back</a>
     <button type="submit">Save</button>
