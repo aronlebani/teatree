@@ -1,11 +1,11 @@
-<form class="container full-screen-form" action="/user/<%= user['id'] %>" method="post">
+<form class="container full-screen-form" action="/user/<%= @user['id'] %>" method="post">
   <header>
     <h2>Edit your details</h2>
   </header>
   <label for="name">Name</label>
-  <input id="name" type="text" name="name" value="<%= user['name'] %>" required />
+  <input id="name" type="text" name="name" value="<%= @user['name'] %>" required />
   <label for="email">Email</label>
-  <input id="email" type="email" name="email" value="<%= user['email'] %>" required />
+  <input id="email" type="email" name="email" value="<%= @user['email'] %>" required />
   <label for="password">Password</label>
   <input  id="password" value="********" disabled />
   <a href="/change-password">Change password</a>

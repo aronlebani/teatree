@@ -3,32 +3,32 @@
     <h2>Your details</h2>
   </header>
   <ul>
-    <li>Name<span><%= user['name'] %></span></li>
-    <li>Email<span><%= user['email'] %></span></li>
+    <li>Name<span><%= @user['name'] %></span></li>
+    <li>Email<span><%= @user['email'] %></span></li>
   </ul>
   <footer>
     <div></div>
-    <a href="/user/<%= user['id'] %>/edit">Edit</a>
+    <a href="/user/<%= @user['id'] %>/edit">Edit</a>
   </footer>
 </section>
 <section id="profile" class="container">
   <header>
     <h2>Profile</h2>
     <div class="columns">
-      <% if profile['is_live'] %>
+      <% if @profile['is_live'] %>
         <span>Your profile is live!</span>
       <% else %>
         <form
           class="make-live"
           name="profile-live"
-          action="/profile/<%= profile['id'] %>/live"
+          action="/profile/<%= @profile['id'] %>/live"
           method="post"
         >
           <button class="action" type="submit">Go live!</button>
         </form>
       <% end %>
-      <button class="mlh secondary" onclick="window.open('/u/<%= profile['username'] %>', '_blank')">
-        <% if profile['is_live'] %>
+      <button class="mlh secondary" onclick="window.open('/u/<%= @profile['username'] %>', '_blank')">
+        <% if @profile['is_live'] %>
           Preview
         <% else %>
           Test
@@ -36,11 +36,11 @@
       </button>
     </div>
   </header>
-  <% if profile['image_url'] %>
+  <% if @profile['image_url'] %>
     <img
       class="profile-image"
-      src="/<%= profile['image_url'] %>"
-      alt="<%= profile['image_alt'] %>"
+      src="/<%= @profile['image_url'] %>"
+      alt="<%= @profile['image_alt'] %>"
     />
   <% else %>
     <img class="profile-image" src="/assets/profile-default.jpg" alt="" />
@@ -49,8 +49,8 @@
     <li>
       Profile URL
       <span class="columns">
-        <a id="copy-text" href="https://<%= hostname %>/u/<%= profile['username'] %>" target="_blank">
-          https://<%= hostname %>/u/<%= profile['username'] %>
+        <a id="copy-text" href="https://<%= @hostname %>/u/<%= @profile['username'] %>" target="_blank">
+          https://<%= @hostname %>/u/<%= @profile['username'] %>
         </a>
         <span class="mlh">
           <img id="copy" role="button" onclick="copy()" src="/assets/copy.svg" alt="Copy" />
@@ -60,32 +60,32 @@
     </li>
     <li>
       Title
-      <a class="hidden-link" href="/profile/<%= profile['id'] %>/edit">
-        <% if profile['title'] %><%= profile['title'] %><% else %>-<% end %>
+      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+        <% if @profile['title'] %><%= @profile['title'] %><% else %>-<% end %>
       </a>
     </li>
     <li>
       Primary colour
-      <a class="hidden-link" href="/profile/<%= profile['id'] %>/edit">
-        <span class="colour-blob" style="background-color: <%= profile['colour'] %>"></span>
+      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+        <span class="colour-blob" style="background-color: <%= @profile['colour'] %>"></span>
       </a>
     </li>
     <li>
       Background colour
-      <a class="hidden-link" href="/profile/<%= profile['id'] %>/edit">
-        <span class="colour-blob" style="background-color: <%= profile['bg_colour'] %>"></span>
+      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+        <span class="colour-blob" style="background-color: <%= @profile['bg_colour'] %>"></span>
       </a>
     </li>
     <li>
       Custom css
-      <a class="hidden-link" href="/profile/<%= profile['id'] %>/edit">
-        <% if profile['css'] %>Enabled<% else %>-<% end %>
+      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+        <% if @profile['css'] %>Enabled<% else %>-<% end %>
       </a>
     </li>
   </ul>
   <footer>
     <div></div>
-    <a href="/profile/<%= profile['id'] %>/edit">Edit</a>
+    <a href="/profile/<%= @profile['id'] %>/edit">Edit</a>
   </footer>
 </section>
 <section id="links" class="container">
@@ -93,7 +93,7 @@
     <h2>Links</h2>
   </header>
   <ul>
-    <% for link in links %>
+    <% for link in @links %>
       <li>
         <a class="link" href="<%= link['href'] %>" target="_blank"><%= link['title'] %></a>
         <div class="link-controls">
@@ -126,10 +126,10 @@
   <ul>
     <li>
       Mailchimp
-      <% if integration['mailchimp_subscribe_url'] %>
+      <% if @integration['mailchimp_subscribe_url'] %>
         <span>Enabled</span>
       <% else %>
-        <a href="/integration/<%= integration['id'] %>/mailchimp/edit">
+        <a href="/integration/<%= @integration['id'] %>/mailchimp/edit">
           Enable
         </a>
       <% end %>

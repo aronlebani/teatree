@@ -5,30 +5,30 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="/public-profile.css">
-		<title><%= profile['title'] || profile['username'] %></title>
-		<meta property="og:title" content="<%= profile['title'] || profile['username'] %>" />
-		<meta property="og:url" content="https://teatr.ee/<%= profile['username'] %>" />
+		<title><%= @profile['title'] || @profile['username'] %></title>
+		<meta property="og:title" content="<%= @profile['title'] || @profile['username'] %>" />
+		<meta property="og:url" content="https://teatr.ee/<%= @profile['username'] %>" />
 		<meta property="og:type" content="website" />
 		<meta property="og:description" content="" />
 		<style>
 			body {
-				<% if profile['colour'] %>
-					color: <%= profile['colour'] %>;
+				<% if @profile['colour'] %>
+					color: <%= @profile['colour'] %>;
 				<% else %>
 					color: var(--colour);
 				<% end %>
 
-				<% if profile['bg_colour'] %>
-					background-color: <%= profile['bg_colour'] %>;
+				<% if @profile['bg_colour'] %>
+					background-color: <%= @profile['bg_colour'] %>;
 				<% else %>
 					background-color: var(--bg-colour);
 				<% end %>
 			}
 
 			a, a:visited {
-				<% if profile['colour'] %>
-					color: <%= profile['colour'] %>;
-					border: 2px solid <%= profile['colour'] %>;
+				<% if @profile['colour'] %>
+					color: <%= @profile['colour'] %>;
+					border: 2px solid <%= @profile['colour'] %>;
 				<% else %>
 					color: var(--colour);
 					border: 2px solid var(--colour);
@@ -36,22 +36,22 @@
 			}
 
 			a:hover {
-				<% if profile['bg_colour'] %>
-					color: <%= profile['bg_colour'] %>;
+				<% if @profile['bg_colour'] %>
+					color: <%= @profile['bg_colour'] %>;
 				<% else %>
 					color: var(--bg-colour);
 				<% end %>
 
-				<% if profile['colour'] %>
-					background-color: <%= profile['colour'] %>;
+				<% if @profile['colour'] %>
+					background-color: <%= @profile['colour'] %>;
 				<% else %>
 					background-color: var(--colour);
 				<% end %>
 			}
 
 			input {
-				<% if profile['colour'] %>
-					border: 2px solid <%= profile['colour'] %>;
+				<% if @profile['colour'] %>
+					border: 2px solid <%= @profile['colour'] %>;
 				<% else %>
 					border: 2px solid var(--colour);
 				<% end %>
@@ -62,16 +62,16 @@
 			}
 
 			button {
-				<% if profile['colour'] %>
-					background-color: <%= profile['colour'] %>;
-					border: 2px solid <%= profile['colour'] %>;
+				<% if @profile['colour'] %>
+					background-color: <%= @profile['colour'] %>;
+					border: 2px solid <%= @profile['colour'] %>;
 				<% else %>
 					background-color: var(--colour);
 					border: 2px solid var(--colour);
 				<% end %>
 
-				<% if profile['bg_colour'] %>
-					color: <%= profile['bg_colour'] %>;
+				<% if @profile['bg_colour'] %>
+					color: <%= @profile['bg_colour'] %>;
 				<% else %>
 					color: var(--bg-colour);
 				<% end %>
@@ -82,16 +82,16 @@
 
 			/* user-defined css */
 
-			<%= profile['css'] %>
+			<%= @profile['css'] %>
 		</style>
 	</head>
 	<body>
 		<div class="inner">
-			<% if profile['image_url'] %>
+			<% if @profile['image_url'] %>
 				<img
 					id="profile-image"
-					src="/<%= profile['image_url']%>"
-					alt="<%= profile['image_alt'] %>"
+					src="/<%= @profile['image_url']%>"
+					alt="<%= @profile['image_alt'] %>"
 				/>
 			<% else %>
 				<img
@@ -101,18 +101,18 @@
 				/>
 			<% end %>
 			<h1>
-				<%= profile['title'] || profile['username'] %>
+				<%= @profile['title'] || @profile['username'] %>
 			</h1>
 			<ul>
-				<% for link in links %>
+				<% for link in @links %>
 					<li>
 						<a class="link" href="<%= link['href'] %>" target="_blank"><%= link['title'] %></a>
 					</li>
 				<% end %>
 			</ul>
-      <% if integration['mailchimp_subscribe_url'] %>
+      <% if @integration['mailchimp_subscribe_url'] %>
 				<form
-					action="<%= integration['mailchimp_subscribe_url'] %>"
+					action="<%= @integration['mailchimp_subscribe_url'] %>"
 					method="post"
 					target="_blank"
 				>

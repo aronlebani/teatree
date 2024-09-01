@@ -1,15 +1,15 @@
 <form
   class="container full-screen-form"
-  action="/link/<%= link['id'] %>"
+  action="/link/<%= @link['id'] %>"
   method="post"
 >
   <header>
     <h2>Edit link</h2>
   </header>
   <label for="title">Title</label>
-  <input id="title" type="text" name="title" value="<%= link['title'] %>" required />
+  <input id="title" type="text" name="title" value="<%= @link['title'] %>" required />
   <label for="href">URL</label>
-  <input id="href" type="url" name="href" value="<%= link['href'] %>" required />
+  <input id="href" type="url" name="href" value="<%= @link['href'] %>" required />
   <footer>
     <a href="/admin">Back</a>
     <button type="submit">Save</button>

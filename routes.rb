@@ -8,13 +8,11 @@ end
 
 # --- Signup ---
 
-get '/signup' do # new
-  hostname = ENV['HOSTNAME']
-
-  erb :signup_new, locals: { hostname: hostname }
+get '/signup' do
+  erb :signup
 end
 
-post '/signup' do # create
+post '/signup' do
   if !valid_user? params['name'], params['email']
     return 400
   elsif !valid_username? params['username']
@@ -37,16 +35,11 @@ end
 
 # --- Login ---
 
-get '/login' do # edit
-  forgot_pw_enabled = ENV['SMTP_HOST'] && ENV['SMTP_PORT'] && ENV['SMTP_PASS'] \
-    && ENV['SMTP_USER'] && ENV['MAILER']
-
-  puts forgot_pw_enabled
-
-  erb :login_edit, locals: { forgot_pw_enabled: forgot_pw_enabled }
+get '/login' do
+  erb :login
 end
 
-post '/login' do # update
+post '/login' do
   user = find_auth_user_by_email params['email']
 
   if !user
@@ -64,7 +57,7 @@ end
 
 # --- Logout ---
 
-get '/logout' do # destroy
+get '/logout' do
   session['user_id'] = nil
   session['profile_id'] = nil
 
@@ -73,18 +66,15 @@ end
 
 # --- Forgot password ---
 
-get '/forgot-password/new' do # new
-  forgot_pw_enabled = ENV['SMTP_HOST'] && ENV['SMTP_PORT'] && ENV['SMTP_PASS'] \
-    && ENV['SMTP_USER'] && ENV['MAILER']
-
-  if !forgot_pw_enabled
+get '/forgot-password/new' do
+  if !@forgot_pw_enabled
     return 404
   end
 
   erb :forgot_password_new
 end
 
-post '/forgot-password' do # create
+post '/forgot-password' do
   user = find_user_by_email params['email']
 
   if !user
@@ -96,7 +86,7 @@ post '/forgot-password' do # create
   "An email to reset your password has been sent to #{params['email']}."
 end
 
-get '/forgot-password/:uuid' do # edit
+get '/forgot-password/:uuid' do
   if expired_pw_reset_request? params['uuid'], 24
     return [410, 'This link has expired']
   end
@@ -104,7 +94,7 @@ get '/forgot-password/:uuid' do # edit
   erb :forgot_password_edit
 end
 
-post '/forgot-password/:uuid' do # update
+post '/forgot-password/:uuid' do
   prr = find_pw_reset_request params['uuid']
 
   if !prr
@@ -118,81 +108,69 @@ post '/forgot-password/:uuid' do # update
   redirect '/login'
 end
 
-# --- Change password ---
+# --- Public profile ---
 
-get '/change-password' do # edit
-  erb :change_password_edit
-end
+get '/u/:username' do
+  @profile = find_public_profile params['username']
+  @integration = find_public_integration params['username']
 
-post '/change-password' do # update
-  user = find_auth_user session['user_id']
-
-  if !user
+  if !@profile
     return 404
-  elsif !valid_password? params['new_password']
-    return 400
   end
 
-  if !should_log_in? user['password'], params['old_password']
-    return [401, 'Incorrect password']
+  @links = find_all_public_links params['username']
+
+  if !show_public_profile? @profile['is_live'], @profile['id'], session['profile_id']
+    return 404
   end
 
-  update_user_password user['id'], params['new_password']
-  session['user_id'] = nil
-  session['profile_id'] = nil
-  redirect '/login'
+  erb :public_profile
 end
 
 # --- Admin ---
 
-get '/admin' do # show
-  hostname = ENV['HOSTNAME']
-  user = find_user session['user_id']
-  profile = find_profile session['profile_id']
-  links = find_all_links_by_profile_id session['profile_id']
-  integration = find_integration session['profile_id']
+get '/admin' do
+  @user = find_user session['user_id']
+  @profile = find_profile session['profile_id']
+  @links = find_all_links_by_profile_id session['profile_id']
+  @integration = find_integration session['profile_id']
 
-  if !user || !profile
+  if !@user || !@profile
     return 404
   end
 
-  erb :admin_show, locals: {
-    user: user,
-    profile: profile,
-    links: links,
-    integration: integration,
-    hostname: hostname
-  }
+  erb :admin
 end
 
 # --- Link ---
 
-get '/link/new' do # new
+get '/link/new' do
   erb :link_new
 end
 
-post '/link' do # create
+post '/link' do
   if !valid_link? params['title'], params['href']
     return 400
   end
 
   create_link session['profile_id'], params['title'], params['href']
+
   redirect '/admin'
 end
 
-get '/link/:id/edit' do # edit
-  link = find_link params['id']
+get '/link/:id/edit' do
+  @link = find_link params['id']
 
-  if !link
+  if !@link
     return 404
-  elsif link['profile_id'] != session['profile_id']
+  elsif @link['profile_id'] != session['profile_id']
     return 403
   end
 
-  erb :link_edit, locals: { link: link }
+  erb :link_edit
 end
 
-post '/link/:id' do # update
+post '/link/:id' do
   link = find_link params['id']
 
   if !link
@@ -208,7 +186,7 @@ post '/link/:id' do # update
   redirect '/admin'
 end
 
-post '/link/:id/delete' do # destroy
+post '/link/:id/delete' do
   link = find_link params['id']
 
   if !link
@@ -224,19 +202,19 @@ end
 
 # --- Profile ---
 
-get '/profile/:id/edit' do # edit
-  profile = find_profile params['id']
+get '/profile/:id/edit' do
+  @profile = find_profile params['id']
 
-  if !profile
+  if !@profile
     return 404
-  elsif profile['id'] != session['profile_id']
+  elsif @profile['id'] != session['profile_id']
     return 403
   end
 
-  erb :profile_edit, locals: { profile: profile }
+  erb :profile_edit
 end
 
-post '/profile/:id' do # update
+post '/profile/:id' do
   profile = find_profile params['id']
 
   if !profile
@@ -256,7 +234,7 @@ post '/profile/:id' do # update
   redirect '/admin'
 end
 
-post '/profile/:id/live' do # update
+post '/profile/:id/live' do
   profile = find_profile params['id']
 
   if !profile
@@ -272,19 +250,19 @@ end
 
 # --- User ---
 
-get '/user/:id/edit' do # edit
-  user = find_user params['id']
+get '/user/:id/edit' do
+  @user = find_user params['id']
 
-  if !user
+  if !@user
     return 404
-  elsif user['id'] != session['user_id']
+  elsif @user['id'] != session['user_id']
     return 403
   end
 
-  erb :user_edit, locals: { user: user }
+  erb :user_edit
 end
 
-post '/user/:id' do # update
+post '/user/:id' do
   user = find_user params['id']
 
   if !user
@@ -302,23 +280,49 @@ post '/user/:id' do # update
   redirect '/admin'
 end
 
+# --- Change password ---
+
+get '/change-password' do
+  erb :change_password_edit
+end
+
+post '/change-password' do
+  user = find_auth_user session['user_id']
+
+  if !user
+    return 404
+  elsif !valid_password? params['new_password']
+    return 400
+  end
+
+  if !should_log_in? user['password'], params['old_password']
+    return [401, 'Incorrect password']
+  end
+
+  update_user_password user['id'], params['new_password']
+  session['user_id'] = nil
+  session['profile_id'] = nil
+
+  redirect '/login'
+end
+
 # --- Integration ---
 
 # --- Mailchimp ---
 
-get '/integration/:id/mailchimp/edit' do # edit
-  integration = find_integration params['id']
+get '/integration/:id/mailchimp/edit' do
+  @integration = find_integration params['id']
 
-  if !integration
+  if !@integration
     return 404
-  elsif integration['profile_id'] != session['profile_id']
+  elsif @integration['profile_id'] != session['profile_id']
     return 403
   end
 
-  erb :integration_mailchimp_edit, locals: { integration: integration }
+  erb :integration_mailchimp_edit
 end
 
-post '/integration/:id/mailchimp' do # update
+post '/integration/:id/mailchimp' do
   integration = find_integration params['id']
 
   if !integration
@@ -337,34 +341,23 @@ post '/integration/:id/mailchimp' do # update
   redirect '/admin'
 end
 
-# --- Public profile ---
-
-get '/u/:username' do # show
-  profile = find_public_profile params['username']
-  integration = find_public_integration params['username']
-
-  if !profile
-    return 404
-  end
-
-  links = find_all_public_links params['username']
-
-  if !show_public_profile? profile['is_live'], profile['id'], session['profile_id']
-    return 404
-  end
-
-  erb :public_profile_show, locals: {
-    profile: profile,
-    links: links,
-    integration: integration
-  }, layout: false
-end
-
 # --- Userdata ---
 
 get '/userdata/:file' do
   # Can't have two public directories, so this is the workaround.
   send_file File.join __dir__, ENV['USERDATA_DIR'], params['file']
+end
+
+# --- Hooks ---
+
+before do
+  @hostname = ENV['HOSTNAME']
+
+  @forgot_pw_enabled = ENV['SMTP_HOST'] &&
+    ENV['SMTP_PORT'] &&
+    ENV['SMTP_PASS'] &&
+    ENV['SMTP_USER'] &&
+    ENV['MAILER']
 end
 
 # --- Authenticated ---
