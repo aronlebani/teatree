@@ -57,8 +57,11 @@ a {
 button {
 	border: 1px solid var(--border-colour);
     border-radius: var(--border-radius);
-	background-color: var(--link-colour);
-	color: var(--accent-colour);
+	background-color: var(--accent-colour);
+	color: var(--action-colour);
+
+	background-color: var(--action-colour);
+	color: var(--font-colour);
 }
 
 form {
@@ -123,9 +126,10 @@ aside {
 
 #site-footer {
 	text-align: center;
-    font-size: 0.75rem;
 	margin: 2rem 0;
 }
+
+/* UI */
 
 .container {
     border: 1px solid var(--border-colour);
@@ -180,6 +184,13 @@ aside {
 	background-color: var(--list-shade-colour);
 }
 
+.full-screen-form {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Modifiers */
+
 .secondary {
 	background-color: var(--accent-colour);
 	color: var(--font-colour);
@@ -204,10 +215,11 @@ aside {
 	color: var(--danger-colour);
 }
 
-.full-screen-form {
-	margin-left: auto;
-	margin-right: auto;
+.info {
+	font-style: italic;
 }
+
+/* Utilities */
 
 .nodecoration {
 	text-decoration: none;
@@ -251,6 +263,8 @@ aside {
 	text-decoration: none;
 	color: inherit;
 }
+
+/* --- Pages --- */
 
 /* Index */
 
@@ -303,6 +317,10 @@ aside {
 	object-fit: cover;
 	border-radius: 50%;
 	border: 1px solid var(--border-colour);
+}
+
+#css {
+	font-family: monospace;
 }
 
 /* Integration */
