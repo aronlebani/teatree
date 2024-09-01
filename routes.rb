@@ -15,13 +15,17 @@ end
 post '/signup' do
   errors = validate_signup params['email'], params['username'], params['password']
 
-  if !errors.empty?
+  unless errors.empty?
     flash['errors'] = errors
     redirect '/signup'
-  elsif email_exists? params['email']
+  end
+
+  if email_exists? params['email']
     flash['errors'] = ['Email address is already registered.']
     redirect '/signup'
-  elsif username_exists? params['username']
+  end
+
+  if username_exists? params['username']
     flash['errors'] = ['Username is already registered.']
     redirect '/signup'
   end
@@ -45,10 +49,12 @@ end
 post '/login' do
   user = find_auth_user_by_email params['email']
 
-  if !user
+  unless user
     flash['errors'] = ['Incorrect username or password.']
     redirect '/login'
-  elsif !authenticated? user['password'], params['password']
+  end
+
+  unless authenticated? user['password'], params['password']
     flash['errors'] = ['Incorrect username or password.']
     redirect '/login'
   end
@@ -73,9 +79,7 @@ end
 # --- Forgot password ---
 
 get '/forgot-password/new' do
-  if !@forgot_pw_enabled
-    return 404
-  end
+  return 404 unless @forgot_pw_enabled
 
   erb :forgot_password_new
 end
@@ -83,9 +87,7 @@ end
 post '/forgot-password' do
   user = find_user_by_email params['email']
 
-  if !user
-    return 404
-  end
+  return 404 unless user
 
   create_pw_reset_request user['id'], user['email']
 
@@ -102,16 +104,15 @@ end
 
 post '/forgot-password/:uuid' do
   prr = find_pw_reset_request params['uuid']
-
   errors = validate_change_password params['new_password'], params['confirm_password']
 
-  if !prr
-    return 404
-  elsif !errors.empty?
+  return 404 unless prr
+
+  unless errors.empty?
     flash['errors'] = errors
     redirect "/forgot-password/#{params['uuid']}"
   end
-  
+
   update_user_password prr['user_id'], params['new_password']
 
   redirect '/login'
@@ -122,14 +123,11 @@ end
 get '/u/:username' do
   @profile = find_public_profile params['username']
   @integration = find_public_integration params['username']
-
-  if !@profile
-    return 404
-  end
-
   @links = find_all_public_links params['username']
 
-  if !show_public_profile? @profile['is_live'], @profile['id'], session['profile_id']
+  return 404 unless @profile
+
+  unless show_public_profile? @profile['is_live'], @profile['id'], session['profile_id']
     return 404
   end
 
@@ -144,9 +142,7 @@ get '/admin' do
   @links = find_all_links_by_profile_id session['profile_id']
   @integration = find_integration session['profile_id']
 
-  if !@user || !@profile
-    return 404
-  end
+  return 404 unless @user && @profile
 
   erb :admin
 end
@@ -160,7 +156,7 @@ end
 post '/link' do
   errors = validate_link params['href']
 
-  if !errors.empty?
+  unless errors.empty?
     flash['errors'] = errors
     redirect '/link/new'
   end
@@ -173,25 +169,20 @@ end
 get '/link/:id/edit' do
   @link = find_link params['id']
 
-  if !@link
-    return 404
-  elsif @link['profile_id'] != session['profile_id']
-    return 403
-  end
+  return 404 unless @link
+  return 403 unless @link['profile_id'] == session['profile_id']
 
   erb :link_edit
 end
 
 post '/link/:id' do
   link = find_link params['id']
-
   errors = validate_link params['href']
 
-  if !link
-    return 404
-  elsif link['profile_id'] != session['profile_id']
-    return 403
-  elsif !errors.empty?
+  return 404 unless link
+  return 403 unless link['profile_id'] == session['profile_id']
+
+  unless errors.empty?
     flash['errors'] = errors
     redirect "/link/#{params['id']}/edit"
   end
@@ -204,11 +195,8 @@ end
 post '/link/:id/delete' do
   link = find_link params['id']
 
-  if !link
-    return 404
-  elsif link['profile_id'] != session['profile_id']
-    return 403
-  end
+  return 404 unless link
+  return 403 unless link['profile_id'] == session['profile_id']
 
   delete_link link['id']
 
@@ -220,25 +208,20 @@ end
 get '/profile/:id/edit' do
   @profile = find_profile params['id']
 
-  if !@profile
-    return 404
-  elsif @profile['id'] != session['profile_id']
-    return 403
-  end
+  return 404 unless @profile
+  return 403 unless @profile['id'] == session['profile_id']
 
   erb :profile_edit
 end
 
 post '/profile/:id' do
   profile = find_profile params['id']
-
   errors = validate_profile params['image'][:filename], params['colour'], params['bg_colour']
 
-  if !profile
-    return 404
-  elsif profile['id'] != session['profile_id']
-    return 403
-  elsif !errors.empty?
+  return 404 unless profile
+  return 403 unless profile['id'] == session['profile_id']
+
+  unless errors.empty?
     flash['errors'] = errors
     redirect "/profile/#{params['id']}/edit"
   end
@@ -255,11 +238,8 @@ end
 post '/profile/:id/live' do
   profile = find_profile params['id']
 
-  if !profile
-    return 404
-  elsif profile['id'] != session['profile_id']
-    return 403
-  end
+  return 404 unless profile
+  return 403 unless profile['id'] == session['profile_id']
 
   update_profile_live profile['id']
 
@@ -271,28 +251,25 @@ end
 get '/user/:id/edit' do
   @user = find_user params['id']
 
-  if !@user
-    return 404
-  elsif @user['id'] != session['user_id']
-    return 403
-  end
+  return 404 unless @user
+  return 403 unless @user['id'] == session['user_id']
 
   erb :user_edit
 end
 
 post '/user/:id' do
   user = find_user params['id']
-
   errors = validate_user params['email']
 
-  if !user
-    return 404
-  elsif user['id'] != session['user_id']
-    return 403
-  elsif !errors.empty?
+  return 404 unless user
+  return 403 unless user['id'] == session['user_id']
+
+  unless errors.empty?
     flash['errors'] = errors
     redirect "/user/#{params['id']}/edit"
-  elsif existing_email_not_mine? params['email'], user['id']
+  end
+
+  if existing_email_not_mine? params['email'], user['id']
     flash['errors'] = ["The email #{params['email']} is already in use."]
     redirect "/user/#{params['id']}/edit"
   end
@@ -310,15 +287,16 @@ end
 
 post '/change-password' do
   user = find_auth_user session['user_id']
-
   errors = validate_change_password params['new_password'], params['confirm_password']
 
-  if !user
-    return 404
-  elsif !errors.empty?
+  return 404 unless user
+
+  unless errors.empty?
     flash['errors'] = errors
     redirect '/change-password'
-  elsif !authenticated? user['password'], params['old_password']
+  end
+
+  unless authenticated? user['password'], params['old_password']
     flash['errors'] = ['Incorrect password']
     redirect '/change-password'
   end
@@ -338,11 +316,8 @@ end
 get '/integration/:id/mailchimp/edit' do
   @integration = find_integration params['id']
 
-  if !@integration
-    return 404
-  elsif @integration['profile_id'] != session['profile_id']
-    return 403
-  end
+  return 404 unless @integration
+  return 403 unless @integration['profile_id'] == session['profile_id']
 
   erb :integration_mailchimp_edit
 end
@@ -350,11 +325,8 @@ end
 post '/integration/:id/mailchimp' do
   integration = find_integration params['id']
 
-  if !integration
-    return 404
-  elsif integration['profile_id'] != session['profile_id']
-    return 403
-  end
+  return 404 unless integration
+  return 403 unless integration['profile_id'] == session['profile_id']
 
   begin
     subscribe_url = get_subscribe_url params['mailchimp_api_key']
@@ -380,10 +352,10 @@ before do
   @hostname = ENV['HOSTNAME']
 
   @forgot_pw_enabled = ENV['SMTP_HOST'] &&
-    ENV['SMTP_PORT'] &&
-    ENV['SMTP_PASS'] &&
-    ENV['SMTP_USER'] &&
-    ENV['MAILER']
+                       ENV['SMTP_PORT'] &&
+                       ENV['SMTP_PASS'] &&
+                       ENV['SMTP_USER'] &&
+                       ENV['MAILER']
 end
 
 # --- Authenticated ---
@@ -391,7 +363,7 @@ end
 before /\/change-password|\/admin|\/profile\/.*|\/link\/.*|\/user\/.*/ do
   # This is error-prone. Would be better to reverse this logic, but it's
   # problematic for /:username routes.
-  if !session['user_id'] || !session['profile_id']
+  unless session['user_id'] && session['profile_id']
     redirect '/login'
   end
 end
@@ -399,13 +371,13 @@ end
 # --- Error handlers ---
 
 error 403 do
-  "Unauthorized."
+  'Unauthorized.'
 end
 
 error 404 do
-  "Not found."
+  'Not found.'
 end
 
 error do
-  [500, "Oops, something went wrong..."]
+  [500, 'Oops, something went wrong...']
 end

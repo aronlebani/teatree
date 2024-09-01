@@ -288,9 +288,9 @@ end
 
 def show_public_profile?(is_live, profile_id, session_profile_id)
   if is_live == 1
-    return true
+    true
   else
-    return session_profile_id && session_profile_id == profile_id
+    session_profile_id && session_profile_id == profile_id
   end
 end
 
@@ -400,13 +400,13 @@ end
 def send_forgot_pw_email(uuid, email)
   link = "https://#{ENV['HOSTNAME']}/forgot-password/#{uuid}"
 
-  message = <<~EOF
+  message = <<~EMAIL
     From: #{ENV['MAILER']}
     To: #{email}
     Subject: Teatree -- Forgot password
 
     Click this link to reset your password <#{link}>
-  EOF
+  EMAIL
 
   Net::SMTP.start(
     ENV['SMTP_HOST'],
