@@ -86,6 +86,12 @@ end
 
 post '/forgot-password' do
   user = find_user_by_email params['email']
+  errors = validate_user params['email']
+
+  unless errors.empty?
+    flash['errors'] = errors
+    redirect '/forgot-password/new'
+  end
 
   return 404 unless user
 
@@ -131,7 +137,7 @@ get '/u/:username' do
     return 404
   end
 
-  erb :public_profile
+  erb :public_profile, layout: false
 end
 
 # --- Admin ---
@@ -216,7 +222,7 @@ end
 
 post '/profile/:id' do
   profile = find_profile params['id']
-  errors = validate_profile params['image'][:filename], params['colour'], params['bg_colour']
+  errors = validate_profile params.dig('image', :filename), params['colour'], params['bg_colour']
 
   return 404 unless profile
   return 403 unless profile['id'] == session['profile_id']
@@ -333,7 +339,7 @@ post '/integration/:id/mailchimp' do
     update_integration integration['id'], subscribe_url
   rescue
     flash['errors'] = ['Could not parse API key.']
-    redirect "/ingetration/#{params['id']}/mailchimp/edit"
+    redirect "/integration/#{params['id']}/mailchimp/edit"
   end
 
   redirect '/admin'

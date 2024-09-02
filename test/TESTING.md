@@ -82,6 +82,7 @@
     * [ ] Link should not show in list
 
 9. Enable mailchimp integration
+    * [ ] Before enabling, public profile page should not show signup form
     * [ ] Edit mailchimp page should render
     * [ ] Back button should take you to /admin
     * [ ] Should validate non-empty API key
@@ -91,6 +92,7 @@
     9.2. Enter a valid API key
         * [ ] Submit should redirect to /admin
         * [ ] Status should show "enabled"
+        * [ ] Public profile should show signup form
 
 10. Preview public profile
     * [ ] Public profile page should render
@@ -125,6 +127,9 @@
             * [ ] Should redirect to /admin
 
 13. Permissions
+    * [ ] Can't view profile that doesn't belong to logged in user
     * [ ] Can't edit profile that doesn't belong to logged in user
+    * [ ] Can't view user that isn't logged in
     * [ ] Can't edit user that isn't logged in
+    * [ ] Can't view link belonging to different profile
     * [ ] Can't edit link belonging to different profile
