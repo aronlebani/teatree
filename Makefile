@@ -1,7 +1,7 @@
 include .env
 
 RUBY ?= ruby
-FILES = Makefile Gemfile Gemfile.lock *.rb views public scripts
+FILES = Makefile Gemfile Gemfile.lock config.ru *.rb views public scripts
 
 install:
 	bundle install
@@ -14,6 +14,5 @@ start:
 
 deploy:
 	rsync -rvsp --delete $(FILES) $(APP_HOST):$(APP_DEST)
-	ssh $(APP_HOST) 'systemctl restart teatree.service'
 
 .PHONY: install debug start deploy
