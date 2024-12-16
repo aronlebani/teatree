@@ -13,26 +13,26 @@ get '/signup' do
 end
 
 post '/signup' do
-  errors = validate_signup params['email'], params['username'], params['password']
+  errors = validate_signup(params['email'], params['username'], params['password'])
 
   unless errors.empty?
     flash['errors'] = errors
     redirect '/signup'
   end
 
-  if email_exists? params['email']
+  if email_exists?(params['email'])
     flash['errors'] = ['Email address is already registered.']
     redirect '/signup'
   end
 
-  if username_exists? params['username']
+  if username_exists?(params['username'])
     flash['errors'] = ['Username is already registered.']
     redirect '/signup'
   end
 
-  user_id = create_user params['name'], params['email'], params['password']
-  profile_id = create_profile user_id, params['username']
-  create_integration profile_id
+  user_id = create_user(params['name'], params['email'], params['password'])
+  profile_id = create_profile(user_id, params['username'])
+  create_integration(profile_id)
 
   session['user_id'] = user_id
   session['profile_id'] = profile_id
@@ -47,19 +47,19 @@ get '/login' do
 end
 
 post '/login' do
-  user = find_auth_user_by_email params['email']
+  user = find_auth_user_by_email(params['email'])
 
   unless user
     flash['errors'] = ['Incorrect username or password.']
     redirect '/login'
   end
 
-  unless authenticated? user['password'], params['password']
+  unless authenticated?(user['password'], params['password'])
     flash['errors'] = ['Incorrect username or password.']
     redirect '/login'
   end
 
-  profile = find_profile_by_user_id user['id']
+  profile = find_profile_by_user_id(user['id'])
 
   session['user_id'] = user['id']
   session['profile_id'] = profile['id']
@@ -85,8 +85,8 @@ get '/forgot-password/new' do
 end
 
 post '/forgot-password' do
-  user = find_user_by_email params['email']
-  errors = validate_user params['email']
+  user = find_user_by_email(params['email'])
+  errors = validate_user(params['email'])
 
   unless errors.empty?
     flash['errors'] = errors
@@ -95,13 +95,13 @@ post '/forgot-password' do
 
   return 404 unless user
 
-  create_pw_reset_request user['id'], user['email']
+  create_pw_reset_request(user['id'], user['email'])
 
   "An email to reset your password has been sent to #{params['email']}."
 end
 
 get '/forgot-password/:uuid' do
-  if expired_pw_reset_request? params['uuid'], 24
+  if expired_pw_reset_request?(params['uuid'], 24)
     return [410, 'This link has expired']
   end
 
@@ -109,8 +109,8 @@ get '/forgot-password/:uuid' do
 end
 
 post '/forgot-password/:uuid' do
-  prr = find_pw_reset_request params['uuid']
-  errors = validate_change_password params['new_password'], params['confirm_password']
+  prr = find_pw_reset_request(params['uuid'])
+  errors = validate_change_password(params['new_password'], params['confirm_password'])
 
   return 404 unless prr
 
@@ -119,7 +119,7 @@ post '/forgot-password/:uuid' do
     redirect "/forgot-password/#{params['uuid']}"
   end
 
-  update_user_password prr['user_id'], params['new_password']
+  update_user_password(prr['user_id'], params['new_password'])
 
   redirect '/login'
 end
@@ -127,13 +127,13 @@ end
 # --- Public profile ---
 
 get '/u/:username' do
-  @profile = find_public_profile params['username']
-  @integration = find_public_integration params['username']
-  @links = find_all_public_links params['username']
+  @profile = find_public_profile(params['username'])
+  @integration = find_public_integration(params['username'])
+  @links = find_all_public_links(params['username'])
 
   return 404 unless @profile
 
-  unless show_public_profile? @profile['is_live'], @profile['id'], session['profile_id']
+  unless show_public_profile?(@profile['is_live'], @profile['id'], session['profile_id'])
     return 404
   end
 
@@ -143,10 +143,10 @@ end
 # --- Admin ---
 
 get '/admin' do
-  @user = find_user session['user_id']
-  @profile = find_profile session['profile_id']
-  @links = find_all_links_by_profile_id session['profile_id']
-  @integration = find_integration session['profile_id']
+  @user = find_user(session['user_id'])
+  @profile = find_profile(session['profile_id'])
+  @links = find_all_links_by_profile_id(session['profile_id'])
+  @integration = find_integration(session['profile_id'])
 
   return 404 unless @user && @profile
 
@@ -155,25 +155,25 @@ end
 
 # --- Link ---
 
-get '/link/new' do
+get '/admin/link/new' do
   erb :link_new
 end
 
-post '/link' do
-  errors = validate_link params['href']
+post '/admin/link' do
+  errors = validate_link(params['href'])
 
   unless errors.empty?
     flash['errors'] = errors
     redirect '/link/new'
   end
 
-  create_link session['profile_id'], params['title'], params['href']
+  create_link(session['profile_id'], params['title'], params['href'])
 
   redirect '/admin'
 end
 
-get '/link/:id/edit' do
-  @link = find_link params['id']
+get '/admin/link/:id/edit' do
+  @link = find_link(params['id'])
 
   return 404 unless @link
   return 403 unless @link['profile_id'] == session['profile_id']
@@ -181,9 +181,9 @@ get '/link/:id/edit' do
   erb :link_edit
 end
 
-post '/link/:id' do
-  link = find_link params['id']
-  errors = validate_link params['href']
+post '/admin/link/:id' do
+  link = find_link(params['id'])
+  errors = validate_link(params['href'])
 
   return 404 unless link
   return 403 unless link['profile_id'] == session['profile_id']
@@ -193,26 +193,26 @@ post '/link/:id' do
     redirect "/link/#{params['id']}/edit"
   end
 
-  update_link link['id'], params['title'], params['href']
+  update_link(link['id'], params['title'], params['href'])
 
   redirect '/admin'
 end
 
-post '/link/:id/delete' do
-  link = find_link params['id']
+post '/admin/link/:id/delete' do
+  link = find_link(params['id'])
 
   return 404 unless link
   return 403 unless link['profile_id'] == session['profile_id']
 
-  delete_link link['id']
+  delete_link(link['id'])
 
   redirect '/admin'
 end
 
 # --- Profile ---
 
-get '/profile/:id/edit' do
-  @profile = find_profile params['id']
+get '/admin/profile/:id/edit' do
+  @profile = find_profile(params['id'])
 
   return 404 unless @profile
   return 403 unless @profile['id'] == session['profile_id']
@@ -220,9 +220,9 @@ get '/profile/:id/edit' do
   erb :profile_edit
 end
 
-post '/profile/:id' do
-  profile = find_profile params['id']
-  errors = validate_profile params.dig('image', :filename), params['colour'], params['bg_colour']
+post '/admin/profile/:id' do
+  profile = find_profile(params['id'])
+  errors = validate_profile(params.dig('image', :filename), params['colour'], params['bg_colour'])
 
   return 404 unless profile
   return 403 unless profile['id'] == session['profile_id']
@@ -232,30 +232,30 @@ post '/profile/:id' do
     redirect "/profile/#{params['id']}/edit"
   end
 
-  update_profile params['id'], params['title'], params['colour'], params['bg_colour'], params['image_alt'], params['css']
+  update_profile(params['id'], params['title'], params['colour'], params['bg_colour'], params['image_alt'], params['css'])
 
   if params['image']
-    update_profile_image profile['id'], params['image'][:filename], params['image'][:tempfile]
+    update_profile_image(profile['id'], params['image'][:filename], params['image'][:tempfile])
   end
 
   redirect '/admin'
 end
 
-post '/profile/:id/live' do
-  profile = find_profile params['id']
+post '/admin/profile/:id/live' do
+  profile = find_profile(params['id'])
 
   return 404 unless profile
   return 403 unless profile['id'] == session['profile_id']
 
-  update_profile_live profile['id']
+  update_profile_live(profile['id'])
 
   redirect '/admin'
 end
 
 # --- User ---
 
-get '/user/:id/edit' do
-  @user = find_user params['id']
+get '/admin/user/:id/edit' do
+  @user = find_user(params['id'])
 
   return 404 unless @user
   return 403 unless @user['id'] == session['user_id']
@@ -263,9 +263,9 @@ get '/user/:id/edit' do
   erb :user_edit
 end
 
-post '/user/:id' do
-  user = find_user params['id']
-  errors = validate_user params['email']
+post '/admin/user/:id' do
+  user = find_user(params['id'])
+  errors = validate_user(params['email'])
 
   return 404 unless user
   return 403 unless user['id'] == session['user_id']
@@ -280,20 +280,20 @@ post '/user/:id' do
     redirect "/user/#{params['id']}/edit"
   end
 
-  update_user user['id'], params['name'], params['email']
+  update_user(user['id'], params['name'], params['email'])
 
   redirect '/admin'
 end
 
 # --- Change password ---
 
-get '/change-password' do
+get '/admin/change-password' do
   erb :change_password_edit
 end
 
-post '/change-password' do
-  user = find_auth_user session['user_id']
-  errors = validate_change_password params['new_password'], params['confirm_password']
+post '/admin/change-password' do
+  user = find_auth_user(session['user_id'])
+  errors = validate_change_password(params['new_password'], params['confirm_password'])
 
   return 404 unless user
 
@@ -302,12 +302,12 @@ post '/change-password' do
     redirect '/change-password'
   end
 
-  unless authenticated? user['password'], params['old_password']
+  unless authenticated?(user['password'], params['old_password'])
     flash['errors'] = ['Incorrect password']
     redirect '/change-password'
   end
 
-  update_user_password user['id'], params['new_password']
+  update_user_password(user['id'], params['new_password'])
 
   session['user_id'] = nil
   session['profile_id'] = nil
@@ -319,8 +319,8 @@ end
 
 # --- Mailchimp ---
 
-get '/integration/:id/mailchimp/edit' do
-  @integration = find_integration params['id']
+get '/admin/integration/:id/mailchimp/edit' do
+  @integration = find_integration(params['id'])
 
   return 404 unless @integration
   return 403 unless @integration['profile_id'] == session['profile_id']
@@ -328,15 +328,15 @@ get '/integration/:id/mailchimp/edit' do
   erb :integration_mailchimp_edit
 end
 
-post '/integration/:id/mailchimp' do
-  integration = find_integration params['id']
+post '/admin/integration/:id/mailchimp' do
+  integration = find_integration(params['id'])
 
   return 404 unless integration
   return 403 unless integration['profile_id'] == session['profile_id']
 
   begin
-    subscribe_url = get_subscribe_url params['mailchimp_api_key']
-    update_integration integration['id'], subscribe_url
+    subscribe_url = get_subscribe_url(params['mailchimp_api_key'])
+    update_integration(integration['id'], subscribe_url)
   rescue
     flash['errors'] = ['Could not parse API key.']
     redirect "/integration/#{params['id']}/mailchimp/edit"
@@ -347,9 +347,9 @@ end
 
 # --- Userdata ---
 
-get '/userdata/:file' do
+get '/admin/userdata/:file' do
   # Can't have two public directories, so this is the workaround.
-  send_file File.join __dir__, ENV['USERDATA_DIR'], params['file']
+  send_file(File.join __dir__, ENV['USERDATA_DIR'], params['file'])
 end
 
 # --- Hooks ---
@@ -366,9 +366,7 @@ end
 
 # --- Authenticated ---
 
-before /\/change-password|\/admin|\/profile\/.*|\/link\/.*|\/user\/.*/ do
-  # This is error-prone. Would be better to reverse this logic, but it's
-  # problematic for /:username routes.
+before /\/admin\/.*/ do
   unless session['user_id'] && session['profile_id']
     redirect '/login'
   end

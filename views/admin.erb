@@ -8,7 +8,7 @@
   </ul>
   <footer>
     <div></div>
-    <a href="/user/<%= @user['id'] %>/edit">Edit</a>
+    <a href="/admin/user/<%= @user['id'] %>/edit">Edit</a>
   </footer>
 </section>
 <section id="profile" class="container">
@@ -21,7 +21,7 @@
         <form
           class="make-live"
           name="profile-live"
-          action="/profile/<%= @profile['id'] %>/live"
+          action="/admin/profile/<%= @profile['id'] %>/live"
           method="post"
         >
           <button class="action" type="submit">Go live!</button>
@@ -60,32 +60,32 @@
     </li>
     <li>
       Title
-      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
         <% if @profile['title'] %><%= @profile['title'] %><% else %>-<% end %>
       </a>
     </li>
     <li>
       Primary colour
-      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
         <span class="colour-blob" style="background-color: <%= @profile['colour'] %>"></span>
       </a>
     </li>
     <li>
       Background colour
-      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
         <span class="colour-blob" style="background-color: <%= @profile['bg_colour'] %>"></span>
       </a>
     </li>
     <li>
       Custom css
-      <a class="hidden-link" href="/profile/<%= @profile['id'] %>/edit">
+      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
         <% if @profile['css'] %>Enabled<% else %>-<% end %>
       </a>
     </li>
   </ul>
   <footer>
     <div></div>
-    <a href="/profile/<%= @profile['id'] %>/edit">Edit</a>
+    <a href="/admin/profile/<%= @profile['id'] %>/edit">Edit</a>
   </footer>
 </section>
 <section id="links" class="container">
@@ -99,13 +99,13 @@
         <div class="link-controls">
           <a
             class="link-edit"
-            href="/link/<%= link['id'] %>/edit"
+            href="/admin/link/<%= link['id'] %>/edit"
           >
             Edit
           </a>
           <form
             name="link-delete"
-            action="/link/<%= link['id'] %>/delete"
+            action="/admin/link/<%= link['id'] %>/delete"
             method="post"
           >
             <button class="danger" type="submit">Delete</button>
@@ -116,7 +116,7 @@
   </ul>
   <footer>
     <div></div>
-    <a href="/link/new">New link</a>
+    <a href="/admin/link/new">New link</a>
   </footer>
 </section>
 <section id="integrations" class="container">
@@ -129,7 +129,7 @@
       <% if @integration['mailchimp_subscribe_url'] %>
         <span>Enabled</span>
       <% else %>
-        <a href="/integration/<%= @integration['id'] %>/mailchimp/edit">
+        <a href="/admin/integration/<%= @integration['id'] %>/mailchimp/edit">
           Enable
         </a>
       <% end %>

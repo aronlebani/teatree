@@ -41,8 +41,8 @@ def invalid_url?(url)
 end
 
 def make_userdata_path(filename, area, id)
-  ext = File.extname filename
+  ext = File.extname(filename)
   timestamp = DateTime.now.to_time.to_i
 
-  File.join ENV['USERDATA_DIR'], "#{area}.#{id}.#{timestamp}#{ext}"
+  File.join(ENV['USERDATA_DIR'], "#{area}.#{id}.#{timestamp}#{ext}")
 end

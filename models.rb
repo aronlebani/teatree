@@ -352,9 +352,9 @@ def get_subscribe_url(api_key)
   lists_url = URI("https://#{region}.api.mailchimp.com/3.0/lists")
   headers = { 'Authorization': "Bearer #{api_key}" }
 
-  response = Net::HTTP.get lists_url, headers
+  response = Net::HTTP.get(lists_url, headers)
   url = JSON.parse(response)['lists'][0]['subscribe_url_long']
-  parts = url.split '?'
+  parts = url.split('?')
 
   "#{parts[0]}/post?#{parts[1]}"
 end
@@ -379,7 +379,7 @@ def create_pw_reset_request(user_id, email)
          VALUES (?, ?, ?, ?)
   SQL
 
-  send_forgot_pw_email uuid, email
+  send_forgot_pw_email(uuid, email)
 end
 
 def expired_pw_reset_request?(uuid, hours)
@@ -390,8 +390,6 @@ def expired_pw_reset_request?(uuid, hours)
   SQL
 
   created_at = rows[0]['created_at']
-
-  puts created_at
 
   diff = DateTime.now.to_time.to_i - DateTime.parse(created_at).to_time.to_i
   diff > 3600 * hours
@@ -415,6 +413,6 @@ def send_forgot_pw_email(uuid, email)
     user: ENV['SMTP_USER'],
     secret: ENV['SMTP_PASS']
   ) do |smtp|
-    smtp.send_message message, ENV['MAILER'], email
+    smtp.send_message(message, ENV['MAILER'], email)
   end
 end
