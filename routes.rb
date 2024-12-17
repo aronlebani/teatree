@@ -124,22 +124,6 @@ post '/forgot-password/:uuid' do
   redirect '/login'
 end
 
-# --- Public profile ---
-
-get '/u/:username' do
-  @profile = find_public_profile(params['username'])
-  @integration = find_public_integration(params['username'])
-  @links = find_all_public_links(params['username'])
-
-  return 404 unless @profile
-
-  unless show_public_profile?(@profile['is_live'], @profile['id'], session['profile_id'])
-    return 404
-  end
-
-  erb :public_profile, layout: false
-end
-
 # --- Admin ---
 
 get '/admin' do
@@ -350,6 +334,22 @@ end
 get '/userdata/:file' do
   # Can't have two public directories, so this is the workaround.
   send_file(File.join __dir__, ENV['USERDATA_DIR'], params['file'])
+end
+
+# --- Public profile ---
+
+get '/:username' do
+  @profile = find_public_profile(params['username'])
+  @integration = find_public_integration(params['username'])
+  @links = find_all_public_links(params['username'])
+
+  return 404 unless @profile
+
+  unless show_public_profile?(@profile['is_live'], @profile['id'], session['profile_id'])
+    return 404
+  end
+
+  erb :public_profile, layout: false
 end
 
 # --- Hooks ---

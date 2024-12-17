@@ -27,7 +27,7 @@
           <button class="action" type="submit">Go live!</button>
         </form>
       <% end %>
-      <button class="mlh secondary" onclick="window.open('/u/<%= @profile['username'] %>', '_blank')">
+      <button class="mlh secondary" onclick="window.open('/<%= @profile['username'] %>', '_blank')">
         <% if @profile['is_live'] %>
           Preview
         <% else %>
@@ -49,8 +49,8 @@
     <li>
       Profile URL
       <span class="columns">
-        <a id="copy-text" href="https://<%= @hostname %>/u/<%= @profile['username'] %>" target="_blank">
-          https://<%= @hostname %>/u/<%= @profile['username'] %>
+        <a id="copy-text" href="https://<%= @hostname %>/<%= @profile['username'] %>" target="_blank">
+          https://<%= @hostname %>/<%= @profile['username'] %>
         </a>
         <span class="mlh">
           <img id="copy" role="button" onclick="copy()" src="/assets/copy.svg" alt="Copy" />
