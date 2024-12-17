@@ -128,8 +128,8 @@
 
 13. Permissions
     * [ ] Can't view profile that doesn't belong to logged in user
-    * [ ] Can't edit profile that doesn't belong to logged in user
+    * [ ] Can't edit profile that doesn't belong to logged in user (edit form URL in devtools)
     * [ ] Can't view user that isn't logged in
-    * [ ] Can't edit user that isn't logged in
+    * [ ] Can't edit user that isn't logged in (edit form URL in devtools)
     * [ ] Can't view link belonging to different profile
-    * [ ] Can't edit link belonging to different profile
+    * [ ] Can't edit link belonging to different profile (edit form URL in devtools)

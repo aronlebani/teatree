@@ -164,7 +164,7 @@ post '/admin/link' do
 
   unless errors.empty?
     flash['errors'] = errors
-    redirect '/link/new'
+    redirect '/admin/link/new'
   end
 
   create_link(session['profile_id'], params['title'], params['href'])
@@ -190,7 +190,7 @@ post '/admin/link/:id' do
 
   unless errors.empty?
     flash['errors'] = errors
-    redirect "/link/#{params['id']}/edit"
+    redirect "/admin/link/#{params['id']}/edit"
   end
 
   update_link(link['id'], params['title'], params['href'])
@@ -229,7 +229,7 @@ post '/admin/profile/:id' do
 
   unless errors.empty?
     flash['errors'] = errors
-    redirect "/profile/#{params['id']}/edit"
+    redirect "/admin/profile/#{params['id']}/edit"
   end
 
   update_profile(params['id'], params['title'], params['colour'], params['bg_colour'], params['image_alt'], params['css'])
@@ -272,12 +272,12 @@ post '/admin/user/:id' do
 
   unless errors.empty?
     flash['errors'] = errors
-    redirect "/user/#{params['id']}/edit"
+    redirect "/admin/user/#{params['id']}/edit"
   end
 
   if existing_email_not_mine? params['email'], user['id']
     flash['errors'] = ["The email #{params['email']} is already in use."]
-    redirect "/user/#{params['id']}/edit"
+    redirect "/admin/user/#{params['id']}/edit"
   end
 
   update_user(user['id'], params['name'], params['email'])
@@ -299,12 +299,12 @@ post '/admin/change-password' do
 
   unless errors.empty?
     flash['errors'] = errors
-    redirect '/change-password'
+    redirect '/admin/change-password'
   end
 
   unless authenticated?(user['password'], params['old_password'])
     flash['errors'] = ['Incorrect password']
-    redirect '/change-password'
+    redirect '/admin/change-password'
   end
 
   update_user_password(user['id'], params['new_password'])
@@ -339,7 +339,7 @@ post '/admin/integration/:id/mailchimp' do
     update_integration(integration['id'], subscribe_url)
   rescue
     flash['errors'] = ['Could not parse API key.']
-    redirect "/integration/#{params['id']}/mailchimp/edit"
+    redirect "/admin/integration/#{params['id']}/mailchimp/edit"
   end
 
   redirect '/admin'
@@ -347,7 +347,7 @@ end
 
 # --- Userdata ---
 
-get '/admin/userdata/:file' do
+get '/userdata/:file' do
   # Can't have two public directories, so this is the workaround.
   send_file(File.join __dir__, ENV['USERDATA_DIR'], params['file'])
 end
@@ -366,7 +366,7 @@ end
 
 # --- Authenticated ---
 
-before /\/admin\/.*/ do
+before /\/admin.*/ do
   unless session['user_id'] && session['profile_id']
     redirect '/login'
   end

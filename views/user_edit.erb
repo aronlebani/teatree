@@ -8,7 +8,7 @@
   <input id="email" name="email" value="<%= @user['email'] %>" required />
   <label for="password">Password</label>
   <input  id="password" value="********" disabled />
-  <a href="/change-password">Change password</a>
+  <a href="/admin/change-password">Change password</a>
   <% if flash['errors'] %>
     <small class="error"><%= flash['errors'].join('<br>') %></small>
   <% end%>
