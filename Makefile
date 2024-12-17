@@ -7,12 +7,13 @@ install:
 	bundle install
 
 debug:
-	$(RUBY) main.rb -e development -p $(PORT)
+	$(RUBY) -w main.rb -e development -p $(PORT)
 
 start:
 	$(RUBY) main.rb -e production -p $(PORT)
 
-deploy:
-	rsync -rvsp --delete $(FILES) $(APP_HOST):$(APP_DEST)
+upload:
+	rsync -rvsp $(FILES) $(APP_HOST):$(APP_DEST)
+	ssh $(APP_HOST) 'chown -R www-data $(APP_DEST) & systemctl restart $(SERVICE)'
 
-.PHONY: install debug start deploy
+.PHONY: install debug start upload
