@@ -9,9 +9,6 @@ install:
 debug:
 	$(RUBY) -w main.rb -e development -p $(PORT)
 
-start:
-	$(RUBY) main.rb -e production -p $(PORT)
-
 upload:
 	rsync -rvsp $(FILES) $(APP_HOST):$(APP_DEST)
 	ssh $(APP_HOST) 'chown -R www-data $(APP_DEST) & systemctl restart $(SERVICE)'
