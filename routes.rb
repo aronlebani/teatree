@@ -331,9 +331,12 @@ end
 
 # --- Userdata ---
 
-get '/userdata/:file' do
-	# Can't have two public directories, so this is the workaround.
-	send_file(File.join __dir__, ENV['USERDATA_DIR'], params['file'])
+if ENV['ENV'] == 'development'
+	# Let nginx serve static files in production
+	get '/userdata/:file' do
+		# Can't have two public directories, so this is the workaround.
+		send_file(File.join __dir__, ENV['USERDATA_DIR'], params['file'])
+	end
 end
 
 # --- Public profile ---
