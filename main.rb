@@ -20,12 +20,8 @@ set :sessions, true
 set :logging, true
 set :session_secret, ENV['SESSION_SECRET'] || SecureRandom.hex(64)
 set :views, File.join(__dir__, 'views')
-if ENV['ENV'] == 'development'
-	# Let nginx serve static files in production
-	set :public_folder, File.join(__dir__, 'public')
-end
 
-DB = SQLite3::Database.new File.join __dir__, ENV['DB_URL']
+DB = SQLite3::Database.new(ENV['DB_URL'])
 DB.results_as_hash = true
 DB.execute 'PRAGMA JOURNAL_MODE = wal'
 DB.execute 'PRAGMA BUSY_TIMEOUT = 3000'
