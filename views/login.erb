@@ -7,8 +7,8 @@
 		<input id="email" name="email" required />
 		<label for="password">Password</label>
 		<input id="password" type="password" name="password" required />
-		<% if flash['errors'] %>
-			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% if flash[:errors] %>
+			<small class="error"><%= flash[:errors].join('<br>') %></small>
 		<% end%>
 		<footer>
 			<small>

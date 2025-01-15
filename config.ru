@@ -21,8 +21,7 @@ set :logging, true
 set :session_secret, ENV['SESSION_SECRET'] || SecureRandom.hex(64)
 set :views, File.join(__dir__, 'views')
 
-DB = SQLite3::Database.new(ENV['DB_URL'])
-DB.results_as_hash = true
+DB = SQLite3::Database.new(ENV['DB_URL'], results_as_hash: true)
 DB.execute 'PRAGMA JOURNAL_MODE = wal'
 DB.execute 'PRAGMA BUSY_TIMEOUT = 3000'
 

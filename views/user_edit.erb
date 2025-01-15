@@ -10,8 +10,8 @@
 		<label for="password">Password</label>
 		<input  id="password" value="********" disabled />
 		<a href="/admin/change-password">Change password</a>
-		<% if flash['errors'] %>
-			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% if flash[:errors] %>
+			<small class="error"><%= flash[:errors].join('<br>') %></small>
 		<% end%>
 		<footer>
 			<a href="/admin">Back</a>

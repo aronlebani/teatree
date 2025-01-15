@@ -11,8 +11,8 @@
 		<input id="title" name="title" value="" required />
 		<label for="href">URL</label>
 		<input id="href" name="href" value="" required />
-		<% if flash['errors'] %>
-			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% if flash[:errors] %>
+			<small class="error"><%= flash[:errors].join('<br>') %></small>
 		<% end%>
 		<footer>
 			<a href="/admin">Back</a>

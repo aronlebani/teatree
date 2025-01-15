@@ -34,8 +34,8 @@
 		<input id="image-alt" name="image_alt" value="<%= @profile['image_alt'] %>" />
 		<label for="css">Custom CSS</label>
 		<textarea id="css" name="css" rows="4"><%= @profile['css'] %></textarea>
-		<% if flash['errors'] %>
-			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% if flash[:errors] %>
+			<small class="error"><%= flash[:errors].join('<br>') %></small>
 		<% end%>
 		<footer>
 			<a href="/admin">Back</a>

@@ -21,8 +21,8 @@
 		</div>
 		<label for="password">Password</label>
 		<input id="password" type="password" name="password" required />
-		<% if flash['errors'] %>
-			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% if flash[:errors] %>
+			<small class="error"><%= flash[:errors].join('<br>') %></small>
 		<% end%>
 		<footer>
 			<small>Already have an account? <a href="/login">Log in here</a>.</small>

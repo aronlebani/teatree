@@ -21,7 +21,7 @@
 				<span><b>Your profile is live!</b></span>
 			<% end %>
 			<button
-				class="ml1"
+				class="small ml1"
 				onclick="window.open('/<%= @profile['username'] %>', '_blank')"
 			>
         <% if @profile['is_live'] %>
@@ -37,7 +37,7 @@
           action="/admin/profile/<%= @profile['id'] %>/live"
           method="post"
         >
-          <button class="action ml1" type="submit">Go live!</button>
+          <button class="action small ml1" type="submit">Go live!</button>
         </form>
       <% end %>
     </div>

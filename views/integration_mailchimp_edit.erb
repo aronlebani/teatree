@@ -25,8 +25,8 @@
 			*This is only used to enable the integration. We don't store your API
 			key on our server.
 		</small>
-		<% if flash['errors'] %>
-			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% if flash[:errors] %>
+			<small class="error"><%= flash[:errors].join('<br>') %></small>
 		<% end%>
 		<footer>
 			<a href="/admin">Back</a>
