@@ -1,138 +1,154 @@
-<section id="user" class="container">
+<section id="user" class="card">
   <header>
     <h2>Your details</h2>
   </header>
-  <ul>
-    <li>Name<span><%= @user['name'] %></span></li>
-    <li>Email<span><%= @user['email'] %></span></li>
-  </ul>
-  <footer>
-    <div></div>
-    <a href="/admin/user/<%= @user['id'] %>/edit">Edit</a>
-  </footer>
+	<div class="card-body">
+		<ul>
+			<li>Name<span><%= @user['name'] %></span></li>
+			<li>Email<span><%= @user['email'] %></span></li>
+		</ul>
+		<footer>
+			<div></div>
+			<a href="/admin/user/<%= @user['id'] %>/edit">Edit</a>
+		</footer>
+	</div>
 </section>
-<section id="profile" class="container">
+<section id="profile" class="card">
   <header>
     <h2>Profile</h2>
     <div class="columns">
       <% if @profile['is_live'] %>
-        <span>Your profile is live!</span>
-      <% else %>
-        <form
-          class="make-live"
-          name="profile-live"
-          action="/admin/profile/<%= @profile['id'] %>/live"
-          method="post"
-        >
-          <button class="action" type="submit">Go live!</button>
-        </form>
-      <% end %>
-      <button class="mlh secondary" onclick="window.open('/<%= @profile['username'] %>', '_blank')">
+				<span><b>Your profile is live!</b></span>
+			<% end %>
+			<button
+				class="ml1"
+				onclick="window.open('/<%= @profile['username'] %>', '_blank')"
+			>
         <% if @profile['is_live'] %>
           Preview
         <% else %>
           Test
         <% end %>
       </button>
+      <% unless @profile['is_live'] %>
+        <form
+          class="make-live"
+          name="profile-live"
+          action="/admin/profile/<%= @profile['id'] %>/live"
+          method="post"
+        >
+          <button class="action ml1" type="submit">Go live!</button>
+        </form>
+      <% end %>
     </div>
   </header>
-  <% if @profile['image_url'] %>
-    <img
-      class="profile-image"
-      src="/<%= @profile['image_url'] %>"
-      alt="<%= @profile['image_alt'] %>"
-    />
-  <% else %>
-    <img class="profile-image" src="/assets/profile-default.jpg" alt="" />
-  <% end %>
-  <ul>
-    <li>
-      Profile URL
-      <span class="columns">
-        <a id="copy-text" href="https://<%= @hostname %>/<%= @profile['username'] %>" target="_blank">
-          https://<%= @hostname %>/<%= @profile['username'] %>
-        </a>
-        <span class="mlh">
-          <img id="copy" role="button" onclick="copy()" src="/assets/copy.svg" alt="Copy" />
-          <img id="copied" src="/assets/copied.svg" alt="Copied!" />
-        </span>
-      </span>
-    </li>
-    <li>
-      Title
-      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
-        <% if @profile['title'] %><%= @profile['title'] %><% else %>-<% end %>
-      </a>
-    </li>
-    <li>
-      Primary colour
-      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
-        <span class="colour-blob" style="background-color: <%= @profile['colour'] %>"></span>
-      </a>
-    </li>
-    <li>
-      Background colour
-      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
-        <span class="colour-blob" style="background-color: <%= @profile['bg_colour'] %>"></span>
-      </a>
-    </li>
-    <li>
-      Custom css
-      <a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
-        <% if @profile['css'] %>Enabled<% else %>-<% end %>
-      </a>
-    </li>
-  </ul>
-  <footer>
-    <div></div>
-    <a href="/admin/profile/<%= @profile['id'] %>/edit">Edit</a>
-  </footer>
+	<div class="card-body">
+		<% if @profile['image_url'] %>
+			<img
+				class="profile-image"
+				src="/<%= @profile['image_url'] %>"
+				alt="<%= @profile['image_alt'] %>"
+			/>
+		<% else %>
+			<img class="profile-image" src="/assets/profile-default.jpg" alt="" />
+		<% end %>
+		<ul>
+			<li>
+				Profile URL
+				<span class="columns">
+					<a id="copy-text" href="https://<%= @hostname %>/<%= @profile['username'] %>" target="_blank">
+						https://<%= @hostname %>/<%= @profile['username'] %>
+					</a>
+					<span class="mlh">
+						<img id="copy" role="button" onclick="copy()" src="/assets/copy.svg" alt="Copy" />
+						<img id="copied" src="/assets/copied.svg" alt="Copied!" />
+					</span>
+				</span>
+			</li>
+			<li>
+				Title
+				<a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
+					<% if @profile['title'] %><%= @profile['title'] %><% end %>
+				</a>
+			</li>
+			<li>
+				Primary colour
+				<a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
+					<span class="colour-blob" style="background-color: <%= @profile['colour'] %>"></span>
+				</a>
+			</li>
+			<li>
+				Background colour
+				<a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
+					<span class="colour-blob" style="background-color: <%= @profile['bg_colour'] %>"></span>
+				</a>
+			</li>
+			<li>
+				Custom css
+				<a class="hidden-link" href="/admin/profile/<%= @profile['id'] %>/edit">
+					<% if @profile['css'] %>Enabled<% end %>
+				</a>
+			</li>
+		</ul>
+		<footer>
+			<div></div>
+			<a href="/admin/profile/<%= @profile['id'] %>/edit">Edit</a>
+		</footer>
+	</div>
 </section>
-<section id="links" class="container">
+<section id="links" class="card">
   <header>
     <h2>Links</h2>
   </header>
-  <ul>
-    <% for link in @links %>
-      <li>
-        <a class="link" href="<%= link['href'] %>" target="_blank"><%= link['title'] %></a>
-        <div class="link-controls">
-          <a
-            class="link-edit"
-            href="/admin/link/<%= link['id'] %>/edit"
-          >
-            Edit
-          </a>
-          <form
-            name="link-delete"
-            action="/admin/link/<%= link['id'] %>/delete"
-            method="post"
-          >
-            <button class="danger" type="submit">Delete</button>
-          </form>
-        </div>
-      </li>
-    <% end %>
-  </ul>
-  <footer>
-    <div></div>
-    <a href="/admin/link/new">New link</a>
-  </footer>
+	<div class="card-body">
+		<% if @links.empty? %>
+			<p class="mt0">You haven't created any links yet.</p>
+		<% else %>
+			<ul>
+				<% for link in @links %>
+					<li>
+						<a class="link" href="<%= link['href'] %>" target="_blank"><%= link['title'] %></a>
+						<div class="link-controls">
+							<a
+								class="link-edit"
+								href="/admin/link/<%= link['id'] %>/edit"
+							>
+								Edit
+							</a>
+							<form
+								name="link-delete"
+								action="/admin/link/<%= link['id'] %>/delete"
+								method="post"
+							>
+								<button class="danger small" type="submit">Delete</button>
+							</form>
+						</div>
+					</li>
+				<% end %>
+			</ul>
+		<% end %>
+		<footer>
+			<div></div>
+			<a href="/admin/link/new">New link</a>
+		</footer>
+	</div>
 </section>
-<section id="integrations" class="container">
+<section id="integrations" class="card">
   <header>
     <h2>Integrations</h2>
   </header>
-  <ul>
-    <li>
-      Mailchimp
-      <% if @integration['mailchimp_subscribe_url'] %>
-        <span>Enabled</span>
-      <% else %>
-        <a href="/admin/integration/<%= @integration['id'] %>/mailchimp/edit">
-          Enable
-        </a>
-      <% end %>
-    </li>
-  </ul>
+	<div class="card-body">
+		<ul>
+			<li>
+				Mailchimp
+				<% if @integration['mailchimp_subscribe_url'] %>
+					<span>Enabled</span>
+				<% else %>
+					<a href="/admin/integration/<%= @integration['id'] %>/mailchimp/edit">
+						Enable
+					</a>
+				<% end %>
+			</li>
+		</ul>
+	</div>
 </section>

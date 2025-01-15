@@ -1,30 +1,32 @@
-<form class="container full-screen-form" name="signup" method="post">
+<form class="card full-screen-form" name="signup" method="post">
   <header>
     <h2>Sign up</h2>
   </header>
-  <label for="name">Name</label>
-  <input id="name" name="name" required />
-  <label for="email">Email</label>
-  <input id="email" name="email" required />
-  <label for="username">Profile URL</label>
-  <div class="columns distribute">
-    <input
-      id="username"
-      name="username"
-      required
-      oninput="updateProfileURL()"
-    />
-    <div id="profile-url-container">
-      https://<%= @hostname %>/<span id="profile-url"></span>
-    </div>
-  </div>
-  <label for="password">Password</label>
-  <input id="password" type="password" name="password" required />
-  <% if flash['errors'] %>
-    <small class="error"><%= flash['errors'].join('<br>') %></small>
-  <% end%>
-  <footer>
-    <small>Already have an account? <a href="/login">Log in here</a>.</small>
-    <button type="submit">Sign up</button>
-  </footer>
+	<div class="card-body">
+		<label for="name">Name</label>
+		<input id="name" name="name" required />
+		<label for="email">Email</label>
+		<input id="email" name="email" required />
+		<label for="username">Profile URL</label>
+		<div class="columns distribute">
+			<input
+				id="username"
+				name="username"
+				required
+				oninput="updateProfileURL()"
+			/>
+			<div id="profile-url-container">
+				https://<%= @hostname %>/<span id="profile-url"></span>
+			</div>
+		</div>
+		<label for="password">Password</label>
+		<input id="password" type="password" name="password" required />
+		<% if flash['errors'] %>
+			<small class="error"><%= flash['errors'].join('<br>') %></small>
+		<% end%>
+		<footer>
+			<small>Already have an account? <a href="/login">Log in here</a>.</small>
+			<button type="submit">Sign up</button>
+		</footer>
+	</div>
 </form>
