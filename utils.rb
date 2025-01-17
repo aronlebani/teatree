@@ -36,9 +36,9 @@ def combine_validators(*validators)
 	validators.filter { |v| v != true }
 end
 
-def make_userdata_path(filename, area, id)
+def make_userdata_filename(filename, area, id)
 	ext = File.extname(filename)
 	timestamp = DateTime.now.to_time.to_i
 
-	File.join(ENV.fetch('USERDATA_DIR'), "#{area}.#{id}.#{timestamp}#{ext}")
+	"#{area}.#{id}.#{timestamp}#{ext}"
 end

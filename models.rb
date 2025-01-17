@@ -208,10 +208,10 @@ def update_profile(id, title, colour, bg_colour, image_alt, css)
 end
 
 def update_profile_image(id, filename, tempfile)
-	userdata_path = make_userdata_path filename, 'profile', id
-	FileUtils.cp tempfile.path, userdata_path
+	userdata_filename = make_userdata_filename(filename, 'profile', id)
+	FileUtils.cp(tempfile.path, File.join(ENV.fetch('USERDATA_DIR'), userdata_filename))
 
-	DB.execute(<<~SQL, [userdata_path, now, id]).first['id']
+	DB.execute(<<~SQL, [userdata_filename, now, id]).first['id']
 		UPDATE profiles
 		SET image_url = ?, updated_at = ?
 		WHERE id = ?
