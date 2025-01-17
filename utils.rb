@@ -8,28 +8,32 @@ URL_REGEX = /\A#{URI::DEFAULT_PARSER.make_regexp(['http', 'https'])}\z/
 
 def now = DateTime.now.to_s
 
-def invalid_username?(val)
+def valid_username?(val)
 	val.match?(USERNAME_REGEX) || 'Username should be a combination of letters, numbers, and underscores, where the first character is a letter or underscore.'
 end
 
-def invalid_password?(val)
+def valid_password?(val)
 	val.length >= 8 || 'Password should be minimum 8 characters.'
 end
 
-def invalid_colour?(val)
+def valid_colour?(val)
 	val.match?(COLOUR_REGEX) || 'Invalid colour.'
 end
 
-def invalid_image?(val)
+def valid_image?(val)
 	val.match?(IMAGE_REGEX) || 'Only jpg and png images are supported.'
 end
 
-def invalid_email?(val)
+def valid_email?(val)
 	val.match?(EMAIL_REGEX) || 'Invalid email.'
 end
 
-def invalid_url?(val)
+def valid_url?(val)
 	val.match?(URL_REGEX) || 'Invalid URL.'
+end
+
+def combine_validators(*validators)
+	validators.filter { |v| v != true }
 end
 
 def make_userdata_path(filename, area, id)

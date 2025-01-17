@@ -92,22 +92,22 @@ def authenticated?(hash, guess)
 end
 
 def validate_user(email)
-	[invalid_email?(email)].compact
+	combine_validators(valid_email?(email))
 end
 
 def validate_signup(email, username, password)
-	[
-		invalid_email?(email),
-		invalid_username?(username),
-		invalid_password?(password)
-	].compact
+	combine_validators(
+		valid_email?(email),
+		valid_username?(username),
+		valid_password?(password)
+	)
 end
 
 def validate_change_password(new_password, confirm_password)
-	[
-		invalid_password?(new_password),
+	combine_validators(	
+		valid_password?(new_password),
 		confirm_password == new_password || 'Passwords must match'
-	].compact
+	)
 end
 
 def find_link(id)
@@ -160,7 +160,7 @@ def delete_link(id)
 end
 
 def validate_link(href)
-	[invalid_url?(href)].compact
+	combine_validators(valid_url?(href))
 end
 
 def find_profile(id)
@@ -237,15 +237,15 @@ def show_public_profile?(is_live, profile_id)
 end
 
 def validate_profile(image_url, colour, bg_colour)
-	[
-		image_url && invalid_image?(image_url),
-		colour && invalid_colour?(colour),
-		bg_colour && invalid_colour?(bg_colour)
-	].compact
+	combine_validators(	
+		image_url ? valid_image?(image_url) : true,
+		colour ? valid_colour?(colour) : true,
+		bg_colour ? valid_colour?(bg_colour) : true
+	)
 end
 
 def find_integration(id)
-	DB.execute <<~SQL, [id].first
+	DB.execute(<<~SQL, [id]).first
 		SELECT id, profile_id, mailchimp_subscribe_url, created_at, updated_at
 		FROM integrations
 		WHERE id = ?

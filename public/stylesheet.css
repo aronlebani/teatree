@@ -211,6 +211,10 @@ ul {
 	align-items: center;
 }
 
+.center {
+	text-align: center;
+}
+
 .distribute * {
 	flex: 1;
 }

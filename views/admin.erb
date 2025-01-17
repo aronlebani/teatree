@@ -1,35 +1,16 @@
-<section id="user" class="card">
-  <header>
-    <h2>Your details</h2>
-  </header>
-	<div class="card-body">
-		<ul>
-			<li>Name<span><%= @user['name'] %></span></li>
-			<li>Email<span><%= @user['email'] %></span></li>
-		</ul>
-		<footer>
-			<div></div>
-			<a href="/admin/user/<%= @user['id'] %>/edit">Edit</a>
-		</footer>
-	</div>
-</section>
 <section id="profile" class="card">
   <header>
-    <h2>Profile</h2>
+    <h2>Your profile</h2>
     <div class="columns">
-      <% if @profile['is_live'] %>
-				<span><b>Your profile is live!</b></span>
-			<% end %>
-			<button
-				class="small ml1"
-				onclick="window.open('/<%= @profile['username'] %>', '_blank')"
-			>
-        <% if @profile['is_live'] %>
-          Preview
-        <% else %>
-          Test
-        <% end %>
-      </button>
+			<span>
+				<i>
+					<% if @profile['is_live'] %>
+						Your profile is live!
+					<% else %>
+						Your profile is not live yet.
+					<% end %>
+				</i>
+			</span>
       <% unless @profile['is_live'] %>
         <form
           class="make-live"
@@ -37,9 +18,20 @@
           action="/admin/profile/<%= @profile['id'] %>/live"
           method="post"
         >
-          <button class="action small ml1" type="submit">Go live!</button>
+          <button class="ml1" type="submit">Go live</button>
         </form>
+				<span class="ml1"><i>or</i></span>
       <% end %>
+			<button
+				class="ml1"
+				onclick="window.open('/<%= @profile['username'] %>', '_blank')"
+			>
+        <% if @profile['is_live'] %>
+          Preview
+        <% else %>
+          Test it out
+        <% end %>
+      </button>
     </div>
   </header>
 	<div class="card-body">
@@ -102,7 +94,7 @@
   </header>
 	<div class="card-body">
 		<% if @links.empty? %>
-			<p class="mt0">You haven't created any links yet.</p>
+			<p class="center mt0">You haven't created any links yet.</p>
 		<% else %>
 			<ul>
 				<% for link in @links %>
@@ -150,5 +142,20 @@
 				<% end %>
 			</li>
 		</ul>
+	</div>
+</section>
+<section id="user" class="card">
+  <header>
+    <h2>Your details</h2>
+  </header>
+	<div class="card-body">
+		<ul>
+			<li>Name<span><%= @user['name'] %></span></li>
+			<li>Email<span><%= @user['email'] %></span></li>
+		</ul>
+		<footer>
+			<div></div>
+			<a href="/admin/user/<%= @user['id'] %>/edit">Edit</a>
+		</footer>
 	</div>
 </section>
