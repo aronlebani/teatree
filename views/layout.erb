@@ -17,18 +17,24 @@
 			<a class="nodecoration" href="/">
 				<h1>Teatree</h1>
 			</a>
-			<a href="/logout">Log out</a>
+			<span>
+				<% if logged_in? %>
+					<a href="/logout">Log out</a>
+				<% else %>
+					<a href="/login">Log in</a> or <a href="/signup">sign up</a>
+				<% end %>
+			</span>
     </header>
     <main id="site-content">
       <%= yield %>
     </main>
     <footer id="site-footer">
       <small>
-        Made by Aron Lebani, <a href="mailto:aron@lebani.dev">aron@lebani.dev</a>.
-        <br />
         This software is free and open-source &mdash; <a href="https://github.com/aronlebani/teatree" target="_blank">view source</a>.
         <br />
         If you find Teatree useful, please consider making a <a href="https://www.paypal.com/donate/?hosted_button_id=WDXMN26JPFAXL" target="_blank">small donation</a>.
+        <br />
+				<a href="/terms">Terms of service</a> and <a href="/privacy">privacy policy</a>
       </small>
     </footer>
   </body>

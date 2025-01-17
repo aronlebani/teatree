@@ -1,7 +1,21 @@
 # frozen_string_literal: true
 
+helpers do
+	def logged_in?
+		session[:user_id] && session[:profile_id]
+	end
+end
+
 get '/' do
-	erb :index, :layout => false
+	erb :index
+end
+
+get '/terms' do
+	erb :terms
+end
+
+get '/privacy' do
+	erb :privacy
 end
 
 get '/signup' do
@@ -338,7 +352,7 @@ before do
 end
 
 before /\/admin.*/ do
-	redirect '/login' unless session[:user_id] && session[:profile_id]
+	redirect '/login' unless logged_in?
 end
 
 error 403 do
