@@ -56,7 +56,7 @@ You can then run the app using the provided makefile.
 
     make debug
 
-Now point your browser to <http://localhost:5000/admin>, and you should see a
+Now point your browser to <http://localhost:9292/admin>, and you should see a
 login page.
 
 ## Testing

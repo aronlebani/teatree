@@ -8,7 +8,7 @@ install:
 	bundle install
 
 debug:
-	$(RUBY) -w main.rb -e development -p $(PORT)
+	rackup
 
 upload:
 	rsync -rvsp $(SCRIPT) $(APP_HOST):$(APP_DEST)/script
