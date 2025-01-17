@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+get '/' do
+	erb :index, :layout => false
+end
+
 get '/signup' do
 	erb :signup
 end
