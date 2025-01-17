@@ -4,8 +4,10 @@
 	--bg-colour: rgb(236, 243, 250);
 	--highlight-colour: #f5f5f5;
 	--font-colour: #141414;
-	--accent-colour: #4493f8;
-	--accent-colour-light: #4493f81e;
+	/* --accent-colour: #4493f8; */
+	/* --accent-colour-light: #4493f81e; */
+	--accent-colour: #008080;
+	--accent-colour-light: #0080801e;
 	--danger-colour: #f85149;
 	--danger-colour-light: #f851491e;
 	--action-colour: #29903b;
@@ -54,28 +56,18 @@ p {
 }
 
 button {
+	color: var(--accent-colour);
+	background-color: var(--accent-colour-light);
 	border: 1px solid var(--accent-colour);
     border-radius: var(--border-radius);
-	background-color: var(--accent-colour-light);
-	color: var(--accent-colour);
 	height: 2rem;
-	min-width: 4rem;
-}
-
-button.action {
-	color: var(--action-colour);
-	border-color: var(--action-colour);
-	background-color: var(--action-colour-light);
+	min-width: 5rem;
 }
 
 button.danger {
 	color: var(--danger-colour);
-	border-color: var(--danger-colour);
 	background-color: var(--danger-colour-light);
-}
-
-button.secondary {
-	background-color: #ffffff00;
+	border: 1px solid var(--danger-colour);
 }
 
 button.small {
@@ -172,7 +164,7 @@ ul {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
 }
 
 .card footer {
